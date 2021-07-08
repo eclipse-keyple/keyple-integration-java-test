@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains integration tests of all **Eclipse Keyple** components.
+This repository contains integration tests of all **Eclipse Keyple** Java components.
 
 ## User Guide & Download Information
 

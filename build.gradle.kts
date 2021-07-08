@@ -26,6 +26,7 @@ repositories {
     maven(url = "https://repo.eclipse.org/service/local/repositories/maven_central/content")
     mavenCentral()
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
+    maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots")
 }
 dependencies {
     testImplementation("org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.0.0-SNAPSHOT") { isChanging = true }
