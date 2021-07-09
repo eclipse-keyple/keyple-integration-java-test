@@ -190,7 +190,7 @@ public abstract class BaseScenario {
   StubSmartCard getStubSmartCard() {
     return StubSmartCard.builder()
         .withPowerOnData(ByteArrayUtil.fromHex("1234"))
-        .withProcotol(ContactlessCardCommonProtocol.ISO_14443_4.name())
+        .withProtocol(ContactlessCardCommonProtocol.ISO_14443_4.name())
         .withSimulatedCommand("0000000000", "56789000") // Select app
         .withSimulatedCommand("1111111111", "ABCD9000") // Read
         .build();
@@ -199,7 +199,7 @@ public abstract class BaseScenario {
   StubSmartCard getBadStubSmartCard() {
     return StubSmartCard.builder()
         .withPowerOnData(ByteArrayUtil.fromHex("1234"))
-        .withProcotol(ContactlessCardCommonProtocol.ISO_14443_4.name())
+        .withProtocol(ContactlessCardCommonProtocol.ISO_14443_4.name())
         .withSimulatedCommand("1111111111", "ABCD9000") // Read
         .build();
   }
