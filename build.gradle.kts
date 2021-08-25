@@ -38,9 +38,9 @@ dependencies {
     testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.0.0-SNAPSHOT") { isChanging = true }
     testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0-SNAPSHOT") { isChanging = true }
     testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.+") { isChanging = true }
-    testImplementation("com.google.code.gson:gson:2.8.5")
-    testImplementation("org.slf4j:slf4j-api:1.7.25")
-    testImplementation("org.slf4j:slf4j-simple:1.7.25")
+    testImplementation("com.google.code.gson:gson:2.8.8")
+    testImplementation("org.slf4j:slf4j-api:1.7.32")
+    testImplementation("org.slf4j:slf4j-simple:1.7.32")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.assertj:assertj-core:3.15.0")
     testImplementation("org.mockito:mockito-core:2.28.2")
