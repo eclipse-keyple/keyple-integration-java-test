@@ -34,7 +34,7 @@ public class StubSyncEndpointClient implements SyncEndpointClientSpi {
 
   private static final Logger logger = LoggerFactory.getLogger(StubSyncEndpointClient.class);
   private static final ExecutorService taskPool =
-      Executors.newCachedThreadPool(new NamedThreadFactory("syncPool"));;
+      Executors.newCachedThreadPool(new NamedThreadFactory("syncPool"));
   private final String localServiceName;
 
   public StubSyncEndpointClient(String localServiceName) {

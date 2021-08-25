@@ -34,7 +34,7 @@ public class StubSyncEndpointClient implements SyncEndpointClientSpi {
   private static final Logger logger = LoggerFactory.getLogger(StubSyncEndpointClient.class);
   public static String REMOTE_PLUGIN_NAME = "remotePlugin";
   private static final ExecutorService taskPool =
-      Executors.newCachedThreadPool(new NamedThreadFactory("syncPool"));;
+      Executors.newCachedThreadPool(new NamedThreadFactory("syncPool"));
   private final Boolean simulateConnectionError;
   private int messageSent = 0;
 
