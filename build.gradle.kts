@@ -28,15 +28,15 @@ repositories {
     maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots")
 }
 dependencies {
-    testImplementation("org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.0.+") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-common-java-api:2.0.+") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-distributed-network-java-lib:2.0.0-SNAPSHOT") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-distributed-local-java-lib:2.0.0-SNAPSHOT") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.0.0-SNAPSHOT") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.0.0-SNAPSHOT") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.0.0-SNAPSHOT") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0-SNAPSHOT") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.+") { isChanging = true }
+    testImplementation("org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.0.0-rc4")
+    testImplementation("org.eclipse.keyple:keyple-common-java-api:2.0.0-rc4")
+    testImplementation("org.eclipse.keyple:keyple-distributed-network-java-lib:2.0.0-rc4")
+    testImplementation("org.eclipse.keyple:keyple-distributed-local-java-lib:2.0.0-rc4")
+    testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.0.0-rc4")
+    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.0.0-rc5")
+    testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.0.0-rc4")
+    testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0-rc4")
+    testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.0.0-rc4")
     testImplementation("com.google.code.gson:gson:2.8.8")
     testImplementation("org.slf4j:slf4j-api:1.7.32")
     testImplementation("org.slf4j:slf4j-simple:1.7.32")
