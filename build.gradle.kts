@@ -4,7 +4,6 @@
 plugins {
     java
     id("com.diffplug.spotless") version "5.10.2"
-    jacoco
 }
 buildscript {
     repositories {
@@ -54,8 +53,6 @@ java {
     sourceCompatibility = JavaVersion.toVersion(javaSourceLevel)
     targetCompatibility = JavaVersion.toVersion(javaTargetLevel)
     println("Compiling Java $sourceCompatibility to Java $targetCompatibility.")
-    withJavadocJar()
-    withSourcesJar()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,15 +71,6 @@ tasks {
     test {
         testLogging {
             events("passed", "skipped", "failed")
-        }
-        finalizedBy("jacocoTestReport")
-    }
-    jacocoTestReport {
-        dependsOn("test")
-        reports {
-            xml.isEnabled = true
-            csv.isEnabled = false
-            html.isEnabled = true
         }
     }
 }
