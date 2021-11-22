@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2021-11-22]
+### Upgraded
+- "Keyple Card Generic Library" to version `2.0.1`
+
 ## [2021-10-06]
 ### Added
 - "CHANGELOG.md" file (issue [eclipse/keyple#6]).
@@ -20,7 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-10-06...HEAD
+[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-11-22...HEAD
+[2021-11-22]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-10-06...2021-11-22
 [2021-10-06]: https://github.com/eclipse/keyple-integration-java-test/releases/tag/2021-10-06
 
 [eclipse/keyple#6]: https://github.com/eclipse/keyple/issues/6
