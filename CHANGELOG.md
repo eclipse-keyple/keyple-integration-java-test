@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2021-12-20]
+### Upgraded
+- "Keyple Card Generic Library" to version `2.0.2`
+
 ## [2021-12-08]
 ### Upgraded
 - "Keyple Service Library" to version `2.0.1`

@@ -35,7 +35,7 @@ dependencies {
     testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.0.0")
     testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.0.1")
     testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.0.0")
-    testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.1")
+    testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.2")
     testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.+") { isChanging = true }
     testImplementation("com.google.code.gson:gson:2.8.8")
     testImplementation("org.slf4j:slf4j-api:1.7.32")
