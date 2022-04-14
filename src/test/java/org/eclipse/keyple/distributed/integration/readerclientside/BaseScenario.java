@@ -21,7 +21,7 @@ import org.calypsonet.terminal.reader.selection.spi.CardSelection;
 import org.calypsonet.terminal.reader.selection.spi.SmartCard;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.*;
-import org.eclipse.keyple.core.util.ByteArrayUtil;
+import org.eclipse.keyple.core.util.HexUtil;
 import org.eclipse.keyple.core.util.protocol.ContactlessCardCommonProtocol;
 import org.eclipse.keyple.distributed.LocalServiceClient;
 import org.eclipse.keyple.distributed.RemotePluginServer;
@@ -186,7 +186,7 @@ public abstract class BaseScenario {
 
   StubSmartCard getStubSmartCard() {
     return StubSmartCard.builder()
-        .withPowerOnData(ByteArrayUtil.fromHex("1234"))
+        .withPowerOnData(HexUtil.toByteArray("1234"))
         .withProtocol(ContactlessCardCommonProtocol.ISO_14443_4.name())
         .withSimulatedCommand("0000000000", "56789000") // Select app
         .withSimulatedCommand("1111111111", "ABCD9000") // Read
@@ -195,7 +195,7 @@ public abstract class BaseScenario {
 
   StubSmartCard getBadStubSmartCard() {
     return StubSmartCard.builder()
-        .withPowerOnData(ByteArrayUtil.fromHex("1234"))
+        .withPowerOnData(HexUtil.toByteArray("1234"))
         .withProtocol(ContactlessCardCommonProtocol.ISO_14443_4.name())
         .withSimulatedCommand("1111111111", "ABCD9000") // Read
         .build();
