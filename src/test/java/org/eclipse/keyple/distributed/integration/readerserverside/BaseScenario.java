@@ -14,7 +14,6 @@ package org.eclipse.keyple.distributed.integration.readerserverside;
 import org.eclipse.keyple.core.service.ConfigurableReader;
 import org.eclipse.keyple.core.service.Plugin;
 import org.eclipse.keyple.core.service.SmartCardServiceProvider;
-import org.eclipse.keyple.core.util.protocol.ContactlessCardCommonProtocol;
 import org.eclipse.keyple.distributed.LocalServiceServer;
 import org.eclipse.keyple.distributed.RemotePluginClient;
 import org.eclipse.keyple.plugin.stub.*;
@@ -24,6 +23,7 @@ public abstract class BaseScenario {
   public static final String LOCAL_PLUGIN_NAME = StubPluginFactoryBuilder.PLUGIN_NAME;
   public static final String LOCAL_READER_NAME = "stubReader";
   public static final String LOCAL_READER_NAME_2 = "stubReader2";
+  public static final String ISO_CARD_PROTOCOL = "ISO_14443_4_CARD";
 
   public static String REMOTE_PLUGIN_NAME = "remotePlugin";
 
@@ -56,16 +56,12 @@ public abstract class BaseScenario {
     localReader = (ConfigurableReader) localPlugin.getReader(LOCAL_READER_NAME);
     localReaderExtension = (StubReader) localReader.getExtension(StubReader.class);
     // activate ISO_14443_4
-    localReader.activateProtocol(
-        ContactlessCardCommonProtocol.ISO_14443_4.name(),
-        ContactlessCardCommonProtocol.ISO_14443_4.name());
+    localReader.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
 
     // localReader 2 should be reset
     localReader2 = (ConfigurableReader) localPlugin.getReader(LOCAL_READER_NAME_2);
     localReaderExtension2 = (StubReader) localReader2.getExtension(StubReader.class);
     // activate ISO_14443_4
-    localReader2.activateProtocol(
-        ContactlessCardCommonProtocol.ISO_14443_4.name(),
-        ContactlessCardCommonProtocol.ISO_14443_4.name());
+    localReader2.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
   }
 }

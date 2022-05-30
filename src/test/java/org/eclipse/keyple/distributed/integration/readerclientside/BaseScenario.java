@@ -22,7 +22,6 @@ import org.calypsonet.terminal.reader.selection.spi.SmartCard;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.*;
 import org.eclipse.keyple.core.util.HexUtil;
-import org.eclipse.keyple.core.util.protocol.ContactlessCardCommonProtocol;
 import org.eclipse.keyple.distributed.LocalServiceClient;
 import org.eclipse.keyple.distributed.RemotePluginServer;
 import org.eclipse.keyple.distributed.RemotePluginServerFactoryBuilder;
@@ -39,6 +38,7 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseScenario {
 
   private static final Logger logger = LoggerFactory.getLogger(BaseScenario.class);
+  public static final String ISO_CARD_PROTOCOL = "ISO_14443_4_CARD";
 
   public static String LOCAL_PLUGIN_NAME = StubPluginFactoryBuilder.PLUGIN_NAME;
   public static String LOCAL_READER_NAME = "stubReader";
@@ -130,17 +130,13 @@ public abstract class BaseScenario {
     localReader = (ConfigurableReader) localPlugin.getReader(LOCAL_READER_NAME);
     localReaderExtension = localReader.getExtension(StubReader.class);
     // activate ISO_14443_4
-    localReader.activateProtocol(
-        ContactlessCardCommonProtocol.ISO_14443_4.name(),
-        ContactlessCardCommonProtocol.ISO_14443_4.name());
+    localReader.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
 
     // localReader 2 should be reset
     localReader2 = (ConfigurableReader) localPlugin.getReader(LOCAL_READER_NAME_2);
     localReaderExtension2 = localReader2.getExtension(StubReader.class);
     // activate ISO_14443_4
-    localReader2.activateProtocol(
-        ContactlessCardCommonProtocol.ISO_14443_4.name(),
-        ContactlessCardCommonProtocol.ISO_14443_4.name());
+    localReader2.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
   }
 
   void clearLocalReader() {
@@ -187,7 +183,7 @@ public abstract class BaseScenario {
   StubSmartCard getStubSmartCard() {
     return StubSmartCard.builder()
         .withPowerOnData(HexUtil.toByteArray("1234"))
-        .withProtocol(ContactlessCardCommonProtocol.ISO_14443_4.name())
+        .withProtocol(ISO_CARD_PROTOCOL)
         .withSimulatedCommand("0000000000", "56789000") // Select app
         .withSimulatedCommand("1111111111", "ABCD9000") // Read
         .build();
@@ -196,7 +192,7 @@ public abstract class BaseScenario {
   StubSmartCard getBadStubSmartCard() {
     return StubSmartCard.builder()
         .withPowerOnData(HexUtil.toByteArray("1234"))
-        .withProtocol(ContactlessCardCommonProtocol.ISO_14443_4.name())
+        .withProtocol(ISO_CARD_PROTOCOL)
         .withSimulatedCommand("1111111111", "ABCD9000") // Read
         .build();
   }
