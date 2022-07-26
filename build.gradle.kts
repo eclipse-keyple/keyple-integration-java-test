@@ -33,7 +33,7 @@ dependencies {
     testImplementation("org.eclipse.keyple:keyple-distributed-network-java-lib:2.0.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-local-java-lib:2.0.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.0.0")
-    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.0.1")
+    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.1.0")
     testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.0.0")
     testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.2")
     testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.+") { isChanging = true }
