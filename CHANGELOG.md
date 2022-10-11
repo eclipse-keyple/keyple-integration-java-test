@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Added
+- `CardSelectionManagerTest` for import/export card selection feature.
+### Upgraded
+- "Calypsonet Terminal Reader API" to version `1.1.0`.
+- "Calypsonet Terminal Calypso API" to version `1.4.0`.
+- "Keyple Calypso Library" to version `2.2.3`.
+- "Keyple Service Library" to version `2.1.1`.
 
 ## [2022-05-30]
 ### Upgraded
@@ -23,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [2021-10-06]
 ### Added
-- "CHANGELOG.md" file (issue [eclipse/keyple#6]).
+- `CHANGELOG.md` file (issue [eclipse/keyple#6]).
 - Tests for distributed components.
 - Uses of released dependencies:
   - org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.0.+
