@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.google.gson.JsonObject;
 import org.calypsonet.terminal.calypso.card.CalypsoCardSelection;
-import org.calypsonet.terminal.reader.ObservableCardReader;
 import org.calypsonet.terminal.reader.selection.CardSelectionManager;
 import org.calypsonet.terminal.reader.selection.spi.CardSelection;
 import org.eclipse.keyple.card.calypso.CalypsoExtensionService;
@@ -39,8 +38,6 @@ public class CardSelectionManagerTest {
       "{"
           + "   \"multiSelectionProcessing\":\"FIRST_MATCH\","
           + "   \"channelControl\":\"KEEP_OPEN\","
-          + "   \"detectionMode\":\"SINGLESHOT\","
-          + "   \"notificationMode\":\"MATCHED_ONLY\","
           + "   \"cardSelectionsTypes\":["
           + "      \"org.eclipse.keyple.card.calypso.CalypsoCardSelectionAdapter\","
           + "      \"org.eclipse.keyple.card.generic.GenericCardSelectionAdapter\""
@@ -54,9 +51,6 @@ public class CardSelectionManagerTest {
           + "                  \"sfi\":\"01\","
           + "                  \"firstRecordNumber\":\"02\","
           + "                  \"readMode\":\"ONE_RECORD\","
-          + "                  \"records\":{"
-          + "                     "
-          + "                  },"
           + "                  \"commandRef\":{"
           + "                     \"type\":\"org.eclipse.keyple.card.calypso.CalypsoCardCommand\","
           + "                     \"data\":\"READ_RECORDS\""
@@ -145,8 +139,6 @@ public class CardSelectionManagerTest {
   private static JsonObject expectedJson;
 
   private CardSelectionManager manager;
-  private CardSelection calypsoCardSelection;
-  private CardSelection genericCardSelection;
 
   @BeforeClass
   public static void beforeClass() {
@@ -155,7 +147,7 @@ public class CardSelectionManagerTest {
 
   @Before
   public void setUp() {
-    calypsoCardSelection =
+    CardSelection calypsoCardSelection =
         CalypsoExtensionService.getInstance()
             .createCardSelection()
             .acceptInvalidatedCard()
@@ -165,7 +157,7 @@ public class CardSelectionManagerTest {
             .setFileControlInformation(CalypsoCardSelection.FileControlInformation.FCI)
             .setFileOccurrence(CalypsoCardSelection.FileOccurrence.FIRST)
             .prepareReadRecord(SFI, RECORD);
-    genericCardSelection =
+    CardSelection genericCardSelection =
         GenericExtensionService.getInstance()
             .createCardSelection()
             .filterByCardProtocol(GENERIC_CARD_PROTOCOL)
@@ -181,10 +173,7 @@ public class CardSelectionManagerTest {
   @Test
   public void exportImportCardSelectionScenario() {
     // Export 1
-    String export1 =
-        manager.exportCardSelectionScenario(
-            ObservableCardReader.DetectionMode.SINGLESHOT,
-            ObservableCardReader.NotificationMode.MATCHED_ONLY);
+    String export1 = manager.exportCardSelectionScenario();
 
     JsonObject resultJson1 = JsonUtil.getParser().fromJson(export1, JsonObject.class);
     assertThat(resultJson1).isEqualTo(expectedJson);
@@ -196,10 +185,7 @@ public class CardSelectionManagerTest {
     assertThat(index).isEqualTo(1);
 
     // Export 2
-    String export2 =
-        manager2.exportCardSelectionScenario(
-            ObservableCardReader.DetectionMode.SINGLESHOT,
-            ObservableCardReader.NotificationMode.MATCHED_ONLY);
+    String export2 = manager2.exportCardSelectionScenario();
 
     JsonObject resultJson2 = JsonUtil.getParser().fromJson(export2, JsonObject.class);
     assertThat(resultJson2).isEqualTo(expectedJson);

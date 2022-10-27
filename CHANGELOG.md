@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [2022-10-27]
 ### Added
 - `CardSelectionManagerTest` for import/export card selection feature.
 ### Upgraded
@@ -43,7 +45,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-05-30...HEAD
+[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-10-27...HEAD
+[2022-10-27]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-05-30...2022-10-27
 [2022-05-30]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-12-20...2022-05-30
 [2021-12-20]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-12-08...2021-12-20
 [2021-12-08]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-11-22...2021-12-08
