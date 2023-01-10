@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2023-01-10]
+### Upgraded
+- "Calypsonet Terminal Reader API" to `1.2.0`
+- "Keyple Service Library" to version `2.1.2`.
+- "Keyple Calypso Card Library" to version `2.3.1`.
+
 ## [2022-12-06]
 ### Upgraded
 - "Keyple Calypso Library" to version `2.3.0`.

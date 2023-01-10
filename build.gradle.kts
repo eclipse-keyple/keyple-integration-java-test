@@ -28,15 +28,15 @@ repositories {
     maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots")
 }
 dependencies {
-    testImplementation("org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.1.+") { isChanging = true }
+    testImplementation("org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.2.+") { isChanging = true }
     implementation("org.calypsonet.terminal:calypsonet-terminal-calypso-java-api:1.4.+") { isChanging = true }
     testImplementation("org.eclipse.keyple:keyple-common-java-api:2.0.+") { isChanging = true }
     testImplementation("org.eclipse.keyple:keyple-distributed-network-java-lib:2.0.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-local-java-lib:2.0.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.0.0")
-    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.1.1")
+    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.1.2")
     testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.1.0")
-    testImplementation("org.eclipse.keyple:keyple-card-calypso-java-lib:2.3.0")
+    testImplementation("org.eclipse.keyple:keyple-card-calypso-java-lib:2.3.1")
     testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.2")
     testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.+") { isChanging = true }
     testImplementation("com.google.code.gson:gson:2.8.8")
