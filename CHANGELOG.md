@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2023-02-23]
+### Upgraded
+- "Keyple Service Library" to version `2.1.3`.
+- "Keyple Distributed Remote Library" to version `2.1.0`.
+- "Calypsonet Terminal Calypso API" to version `1.6.0`.
+- "Keyple Calypso Card Library" to version `2.3.2`.
+- "Google Gson library" (com.google.code.gson) to version `2.10.1`.
+- "AssertJ" to version `3.23.1`.
+- "Mockito" to version `3.3.3`.
+- "Jackson" to version `2.12.7.1`.
+
 ## [2023-01-10]
 ### Upgraded
 - "Calypsonet Terminal Reader API" to `1.2.0`
@@ -55,7 +66,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-12-06...HEAD
+[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-02-23...HEAD
+[2023-02-23]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-12-06...2023-02-23
 [2022-12-06]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-10-27...2022-12-06
 [2022-10-27]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-05-30...2022-10-27
 [2022-05-30]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-12-20...2022-05-30
