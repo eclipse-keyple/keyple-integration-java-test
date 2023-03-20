@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Upgraded
+- "Keyple Service Library" to version `2.1.4`.
+- "Keyple Distributed Remote Library" to version `2.2.0`.
+- "Keyple Distributed Local Library" to version `2.2.0`.
+- "Calypsonet Terminal Calypso API" to version `1.8.0`.
+- "Keyple Calypso Card Library" to version `2.3.4`.
 
 ## [2023-02-23]
 ### Upgraded
