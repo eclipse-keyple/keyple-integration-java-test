@@ -31,22 +31,22 @@ dependencies {
     testImplementation("org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.2.+") { isChanging = true }
     implementation("org.calypsonet.terminal:calypsonet-terminal-calypso-java-api:1.8.+") { isChanging = true }
     testImplementation("org.eclipse.keyple:keyple-common-java-api:2.0.+") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-distributed-network-java-lib:2.0.0")
-    testImplementation("org.eclipse.keyple:keyple-distributed-local-java-lib:2.2.0-SNAPSHOT") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.2.0-SNAPSHOT") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.1.4-SNAPSHOT") { isChanging = true }
+    testImplementation("org.eclipse.keyple:keyple-distributed-network-java-lib:2.2.0")
+    testImplementation("org.eclipse.keyple:keyple-distributed-local-java-lib:2.2.0")
+    testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.2.0")
+    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.1.4")
     testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.1.0")
-    testImplementation("org.eclipse.keyple:keyple-card-calypso-java-lib:2.3.4-SNAPSHOT") { isChanging = true }
+    testImplementation("org.eclipse.keyple:keyple-card-calypso-java-lib:2.3.4")
     testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.2")
     testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.+") { isChanging = true }
     testImplementation("com.google.code.gson:gson:2.10.1")
-    testImplementation("org.slf4j:slf4j-api:1.7.32")
-    testImplementation("org.slf4j:slf4j-simple:1.7.32")
+    testImplementation("org.slf4j:slf4j-api:2.0.5")
+    testImplementation("org.slf4j:slf4j-simple:2.0.5")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.assertj:assertj-core:3.23.1")
-    testImplementation("org.mockito:mockito-core:3.3.3")
-    testImplementation("org.awaitility:awaitility:4.0.3")
-    testImplementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
+    testImplementation("org.assertj:assertj-core:3.24.2")
+    testImplementation("org.mockito:mockito-core:5.2.0")
+    testImplementation("org.awaitility:awaitility:4.2.0")
+    testImplementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 }
 
 val javaSourceLevel: String by project

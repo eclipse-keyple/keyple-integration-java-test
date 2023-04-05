@@ -5,41 +5,48 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Upgraded
-- "Keyple Service Library" to version `2.1.4`.
-- "Keyple Distributed Remote Library" to version `2.2.0`.
-- "Keyple Distributed Local Library" to version `2.2.0`.
-- "Calypsonet Terminal Calypso API" to version `1.8.0`.
-- "Keyple Calypso Card Library" to version `2.3.4`.
+- "Keyple Service Library" to version `2.1.4`
+- "Keyple Distributed Local Library" to version `2.2.0`
+- "Keyple Distributed Network Library" to version `2.2.0`
+- "Keyple Distributed Remote Library" to version `2.2.0`
+- "Calypsonet Terminal Calypso API" to version `1.8.0`
+- "Keyple Calypso Card Library" to version `2.3.4`
+- "SLF4J API" to version `2.0.5`
+- "SLF4J Simple" to version `2.0.5`
+- "AssertJ" to version `3.24.2`
+- "Mockito" to version `5.2.0`
+- "Awaitility" to version `4.2.0`
+- "Jackson" to version `2.14.2`
 
 ## [2023-02-23]
 ### Upgraded
-- "Keyple Service Library" to version `2.1.3`.
-- "Keyple Distributed Remote Library" to version `2.1.0`.
-- "Calypsonet Terminal Calypso API" to version `1.6.0`.
-- "Keyple Calypso Card Library" to version `2.3.2`.
-- "Google Gson library" (com.google.code.gson) to version `2.10.1`.
-- "AssertJ" to version `3.23.1`.
-- "Mockito" to version `3.3.3`.
-- "Jackson" to version `2.12.7.1`.
+- "Keyple Service Library" to version `2.1.3`
+- "Keyple Distributed Remote Library" to version `2.1.0`
+- "Calypsonet Terminal Calypso API" to version `1.6.0`
+- "Keyple Calypso Card Library" to version `2.3.2`
+- "Google Gson library" (com.google.code.gson) to version `2.10.1`
+- "AssertJ" to version `3.23.1`
+- "Mockito" to version `3.3.3`
+- "Jackson" to version `2.12.7.1`
 
 ## [2023-01-10]
 ### Upgraded
 - "Calypsonet Terminal Reader API" to `1.2.0`
-- "Keyple Service Library" to version `2.1.2`.
-- "Keyple Calypso Card Library" to version `2.3.1`.
+- "Keyple Service Library" to version `2.1.2`
+- "Keyple Calypso Card Library" to version `2.3.1`
 
 ## [2022-12-06]
 ### Upgraded
-- "Keyple Calypso Library" to version `2.3.0`.
+- "Keyple Calypso Library" to version `2.3.0`
 
 ## [2022-10-27]
 ### Added
 - `CardSelectionManagerTest` for import/export card selection feature.
 ### Upgraded
-- "Calypsonet Terminal Reader API" to version `1.1.0`.
-- "Calypsonet Terminal Calypso API" to version `1.4.0`.
-- "Keyple Calypso Library" to version `2.2.3`.
-- "Keyple Service Library" to version `2.1.1`.
+- "Calypsonet Terminal Reader API" to version `1.1.0`
+- "Calypsonet Terminal Calypso API" to version `1.4.0`
+- "Keyple Calypso Library" to version `2.2.3`
+- "Keyple Service Library" to version `2.1.1`
 
 ## [2022-05-30]
 ### Upgraded
