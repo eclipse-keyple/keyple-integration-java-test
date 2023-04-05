@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [2023-04-05]
 ### Upgraded
 - "Keyple Service Library" to version `2.1.4`
 - "Keyple Distributed Local Library" to version `2.2.0`
@@ -79,7 +81,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-02-23...HEAD
+[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-05...HEAD
+[2023-04-05]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-02-23...2023-04-05
 [2023-02-23]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-12-06...2023-02-23
 [2022-12-06]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-10-27...2022-12-06
 [2022-10-27]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-05-30...2022-10-27
