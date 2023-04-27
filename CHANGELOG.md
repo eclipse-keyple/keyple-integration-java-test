@@ -92,7 +92,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-05...HEAD
+[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-27...HEAD
+[2023-04-27]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-05...2023-04-27
 [2023-04-05]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-02-23...2023-04-05
 [2023-02-23]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-12-06...2023-02-23
 [2022-12-06]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-10-27...2022-12-06
