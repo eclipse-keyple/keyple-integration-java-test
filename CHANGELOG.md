@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2023-04-27]
+### Added
+- "Keyple Plugin Card Resource Library" to version `1.0.1`
+### Upgraded
+- "Calypsonet Terminal Reader API" to version `1.2.0`
+- "Calypsonet Terminal Calypso API" to version `1.8.0`
+- "Keyple Common API" to version `2.0.0`
+- "Keyple Service Library" to version `2.2.0`
+- "Keyple Service Resource Library" to version `2.1.1`
+- "Keyple Util Library" to version `2.3.0`
+
 ## [2023-04-05]
 ### Upgraded
 - "Keyple Service Library" to version `2.1.4`

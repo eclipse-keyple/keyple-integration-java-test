@@ -28,17 +28,19 @@ repositories {
     maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots")
 }
 dependencies {
-    testImplementation("org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.2.+") { isChanging = true }
-    implementation("org.calypsonet.terminal:calypsonet-terminal-calypso-java-api:1.8.+") { isChanging = true }
-    testImplementation("org.eclipse.keyple:keyple-common-java-api:2.0.+") { isChanging = true }
+    testImplementation("org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.2.0")
+    testImplementation("org.calypsonet.terminal:calypsonet-terminal-calypso-java-api:1.8.0")
+    testImplementation("org.eclipse.keyple:keyple-common-java-api:2.0.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-network-java-lib:2.2.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-local-java-lib:2.2.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.2.0")
-    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.1.4")
+    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.2.0")
+    testImplementation("org.eclipse.keyple:keyple-service-resource-java-lib:2.1.1")
+    testImplementation("org.eclipse.keyple:keyple-plugin-cardresource-java-lib:1.0.1")
     testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.1.0")
     testImplementation("org.eclipse.keyple:keyple-card-calypso-java-lib:2.3.4")
     testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:2.0.2")
-    testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.+") { isChanging = true }
+    testImplementation("org.eclipse.keyple:keyple-util-java-lib:2.3.0")
     testImplementation("com.google.code.gson:gson:2.10.1")
     testImplementation("org.slf4j:slf4j-api:2.0.5")
     testImplementation("org.slf4j:slf4j-simple:2.0.5")

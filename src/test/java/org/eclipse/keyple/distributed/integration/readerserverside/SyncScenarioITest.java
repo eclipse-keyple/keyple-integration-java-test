@@ -11,56 +11,73 @@
  ************************************************************************************** */
 package org.eclipse.keyple.distributed.integration.readerserverside;
 
+import org.eclipse.keyple.core.service.PoolPlugin;
 import org.eclipse.keyple.core.service.SmartCardServiceProvider;
 import org.eclipse.keyple.distributed.*;
 import org.eclipse.keyple.distributed.integration.readerserverside.endpoint.StubSyncEndpointClient;
 import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SyncScenarioITest extends BaseScenario {
 
-  private static final Logger logger = LoggerFactory.getLogger(SyncScenarioITest.class);
-
-  @Rule public TestName testName = new TestName();
-
-  @Before
-  public void setUp() {
-
-    initLocalStubPlugin();
-
-    localServiceName = testName.getMethodName() + "_sync";
-
-    SyncEndpointClientSpi endpointClient = new StubSyncEndpointClient(localServiceName);
-
-    localServiceExtension =
-        SmartCardServiceProvider.getService()
-            .registerDistributedLocalService(
-                LocalServiceServerFactoryBuilder.builder(localServiceName).withSyncNode().build())
-            .getExtension(LocalServiceServer.class);
-
-    remotePluginClient =
-        SmartCardServiceProvider.getService()
-            .registerPlugin(
-                RemotePluginClientFactoryBuilder.builder(REMOTE_PLUGIN_NAME)
-                    .withSyncNode(endpointClient)
-                    .withoutPluginObservation()
-                    .withoutReaderObservation()
-                    .build())
-            .getExtension(RemotePluginClient.class);
-  }
+  private final SyncEndpointClientSpi endpointClient =
+      new StubSyncEndpointClient(LOCAL_SERVICE_NAME);
 
   @After
   public void tearDown() {
     SmartCardServiceProvider.getService().unregisterPlugin(REMOTE_PLUGIN_NAME);
+    SmartCardServiceProvider.getService().unregisterDistributedLocalService(LOCAL_SERVICE_NAME);
+    SmartCardServiceProvider.getService().unregisterPlugin(LOCAL_CARDRESOURCE_PLUGIN_NAME);
+    SmartCardServiceProvider.getService().unregisterPlugin(LOCAL_PLUGIN_NAME);
   }
 
   @Test
   @Override
-  public void execute_transaction_on_pool_reader() {}
+  public void execute_transaction_with_regular_plugin() {
+
+    // Init server
+    initLocalStubPlugin();
+    SmartCardServiceProvider.getService()
+        .registerDistributedLocalService(
+            LocalServiceServerFactoryBuilder.builder(LOCAL_SERVICE_NAME).withSyncNode().build())
+        .getExtension(LocalServiceServer.class);
+
+    // Init client
+    SmartCardServiceProvider.getService()
+        .registerPlugin(
+            RemotePluginClientFactoryBuilder.builder(REMOTE_PLUGIN_NAME)
+                .withSyncNode(endpointClient)
+                .withoutPluginObservation()
+                .withoutReaderObservation()
+                .build());
+  }
+
+  @Test
+  @Override
+  public void execute_transaction_with_pool_plugin() {
+
+    // Init server
+    initLocalStubPlugin();
+    initLocalCardResourceService();
+    initLocalCardResourcePlugin();
+    SmartCardServiceProvider.getService()
+        .registerDistributedLocalService(
+            LocalServiceServerFactoryBuilder.builder(LOCAL_SERVICE_NAME)
+                .withSyncNode()
+                .withPoolPlugins(LOCAL_CARDRESOURCE_PLUGIN_NAME)
+                .build())
+        .getExtension(LocalServiceServer.class);
+
+    // Init client
+    remotePlugin =
+        (PoolPlugin)
+            SmartCardServiceProvider.getService()
+                .registerPlugin(
+                    RemotePoolPluginClientFactoryBuilder.builder(REMOTE_PLUGIN_NAME)
+                        .withSyncNode(endpointClient)
+                        .build());
+
+    executePoolPluginScenario();
+  }
 }

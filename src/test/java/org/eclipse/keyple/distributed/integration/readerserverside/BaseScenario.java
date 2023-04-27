@@ -11,57 +11,137 @@
  ************************************************************************************** */
 package org.eclipse.keyple.distributed.integration.readerserverside;
 
-import org.eclipse.keyple.core.service.ConfigurableReader;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.shouldHaveThrown;
+
+import org.calypsonet.terminal.calypso.sam.CalypsoSam;
+import org.calypsonet.terminal.reader.CardReader;
+import org.eclipse.keyple.card.calypso.CalypsoExtensionService;
+import org.eclipse.keyple.core.service.KeyplePluginException;
 import org.eclipse.keyple.core.service.Plugin;
+import org.eclipse.keyple.core.service.PoolPlugin;
 import org.eclipse.keyple.core.service.SmartCardServiceProvider;
-import org.eclipse.keyple.distributed.LocalServiceServer;
-import org.eclipse.keyple.distributed.RemotePluginClient;
+import org.eclipse.keyple.core.service.resource.CardResourceProfileConfigurator;
+import org.eclipse.keyple.core.service.resource.CardResourceServiceProvider;
+import org.eclipse.keyple.core.service.resource.PluginsConfigurator;
+import org.eclipse.keyple.core.service.resource.spi.ReaderConfiguratorSpi;
+import org.eclipse.keyple.core.util.HexUtil;
+import org.eclipse.keyple.plugin.cardresource.CardResourcePluginFactoryBuilder;
 import org.eclipse.keyple.plugin.stub.*;
 
 public abstract class BaseScenario {
 
   public static final String LOCAL_PLUGIN_NAME = StubPluginFactoryBuilder.PLUGIN_NAME;
-  public static final String LOCAL_READER_NAME = "stubReader";
+  public static final String LOCAL_READER_NAME_1 = "stubReader1";
   public static final String LOCAL_READER_NAME_2 = "stubReader2";
-  public static final String ISO_CARD_PROTOCOL = "ISO_14443_4_CARD";
+  public static final String ISO_CARD_PROTOCOL = "ISO_7816_SAM";
+  public static final String SAM_C1_POWER_ON_DATA = "3B3F9600805A4880C120501711223344829000";
+  public static final String CARD_RESOURCE_PROFILE_NAME = "cardResourceProfile";
+  public static final String LOCAL_CARDRESOURCE_PLUGIN_NAME = "cardResourcePlugin";
+  public static final String LOCAL_SERVICE_NAME = "localService";
 
   public static String REMOTE_PLUGIN_NAME = "remotePlugin";
 
-  protected String localServiceName;
-  protected LocalServiceServer localServiceExtension;
-
   Plugin localPlugin;
-  StubPlugin localPluginExtension;
-  ConfigurableReader localReader;
-  StubReader localReaderExtension;
-  ConfigurableReader localReader2;
-  StubReader localReaderExtension2;
 
-  protected RemotePluginClient remotePluginClient;
+  PoolPlugin remotePlugin;
 
-  abstract void execute_transaction_on_pool_reader();
+  private StubSmartCard getStubCard() {
+    return StubSmartCard.builder()
+        .withPowerOnData(HexUtil.toByteArray(SAM_C1_POWER_ON_DATA))
+        .withProtocol(ISO_CARD_PROTOCOL)
+        .build();
+  }
+
+  abstract void execute_transaction_with_regular_plugin();
+
+  abstract void execute_transaction_with_pool_plugin();
 
   void initLocalStubPlugin() {
-
     localPlugin =
         SmartCardServiceProvider.getService()
             .registerPlugin(
                 StubPluginFactoryBuilder.builder()
-                    .withStubReader(LOCAL_READER_NAME, true, null)
-                    .withStubReader(LOCAL_READER_NAME_2, true, null)
+                    .withStubReader(LOCAL_READER_NAME_1, false, getStubCard())
+                    .withStubReader(LOCAL_READER_NAME_2, false, getStubCard())
                     .build());
-    localPluginExtension = localPlugin.getExtension(StubPlugin.class);
+  }
 
-    // localReader should be reset
-    localReader = (ConfigurableReader) localPlugin.getReader(LOCAL_READER_NAME);
-    localReaderExtension = (StubReader) localReader.getExtension(StubReader.class);
-    // activate ISO_14443_4
-    localReader.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
+  void initLocalCardResourceService() {
+    CardResourceServiceProvider.getService()
+        .getConfigurator()
+        .withPlugins(
+            PluginsConfigurator.builder()
+                .addPlugin(
+                    localPlugin,
+                    new ReaderConfiguratorSpi() {
+                      @Override
+                      public void setupReader(CardReader cardReader) {}
+                    })
+                .build())
+        .withCardResourceProfiles(
+            CardResourceProfileConfigurator.builder(
+                    CARD_RESOURCE_PROFILE_NAME,
+                    CalypsoExtensionService.getInstance()
+                        .createSamResourceProfileExtension(
+                            CalypsoExtensionService.getInstance().createSamSelection()))
+                .build())
+        .configure();
+    CardResourceServiceProvider.getService().start();
+  }
 
-    // localReader 2 should be reset
-    localReader2 = (ConfigurableReader) localPlugin.getReader(LOCAL_READER_NAME_2);
-    localReaderExtension2 = (StubReader) localReader2.getExtension(StubReader.class);
-    // activate ISO_14443_4
-    localReader2.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
+  void initLocalCardResourcePlugin() {
+    SmartCardServiceProvider.getService()
+        .registerPlugin(
+            CardResourcePluginFactoryBuilder.builder(
+                    LOCAL_CARDRESOURCE_PLUGIN_NAME,
+                    CardResourceServiceProvider.getService(),
+                    CARD_RESOURCE_PROFILE_NAME)
+                .build());
+  }
+
+  void executePoolPluginScenario() {
+
+    // Get card resource #1
+    CardReader r1 = remotePlugin.allocateReader(CARD_RESOURCE_PROFILE_NAME);
+    assertThat(r1).isNotNull();
+    String r1Name = r1.getName();
+    assertThat(r1Name).isNotEmpty();
+
+    CalypsoSam sam1 = (CalypsoSam) remotePlugin.getSelectedSmartCard(r1);
+    assertThat(sam1).isNotNull();
+    assertThat(sam1.getPowerOnData()).isEqualTo(SAM_C1_POWER_ON_DATA);
+
+    // Get card resource #2
+    CardReader r2 = remotePlugin.allocateReader(CARD_RESOURCE_PROFILE_NAME);
+    assertThat(r2).isNotNull();
+    String r2Name = r2.getName();
+    assertThat(r2Name).isNotEqualTo(r1Name);
+
+    CalypsoSam sam2 = (CalypsoSam) remotePlugin.getSelectedSmartCard(r2);
+    assertThat(sam2).isNotNull();
+    assertThat(sam2.getPowerOnData()).isEqualTo(SAM_C1_POWER_ON_DATA);
+
+    // Get card resource #3
+    try {
+      // No resource available
+      remotePlugin.allocateReader(CARD_RESOURCE_PROFILE_NAME);
+      shouldHaveThrown(KeyplePluginException.class);
+    } catch (KeyplePluginException ignored) {
+    }
+
+    remotePlugin.releaseReader(r1);
+
+    CardReader r3 = remotePlugin.allocateReader(CARD_RESOURCE_PROFILE_NAME);
+    assertThat(r3).isNotNull();
+    String r3Name = r3.getName();
+    assertThat(r3Name).isEqualTo(r1Name);
+
+    CalypsoSam sam3 = (CalypsoSam) remotePlugin.getSelectedSmartCard(r3);
+    assertThat(sam3).isNotNull();
+    assertThat(sam3.getPowerOnData()).isEqualTo(SAM_C1_POWER_ON_DATA);
+
+    remotePlugin.releaseReader(r2);
+    remotePlugin.releaseReader(r3);
   }
 }

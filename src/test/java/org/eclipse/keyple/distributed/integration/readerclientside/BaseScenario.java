@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import java.util.concurrent.*;
+import org.calypsonet.terminal.reader.ConfigurableCardReader;
 import org.calypsonet.terminal.reader.selection.CardSelectionManager;
 import org.calypsonet.terminal.reader.selection.CardSelectionResult;
 import org.calypsonet.terminal.reader.selection.spi.CardSelection;
@@ -58,9 +59,9 @@ public abstract class BaseScenario {
 
   Plugin localPlugin;
   StubPlugin localPluginExtension;
-  ConfigurableReader localReader;
+  ConfigurableCardReader localReader;
   StubReader localReaderExtension;
-  ConfigurableReader localReader2;
+  ConfigurableCardReader localReader2;
   StubReader localReaderExtension2;
 
   ObservablePlugin remotePlugin;
@@ -127,14 +128,15 @@ public abstract class BaseScenario {
     localPluginExtension = localPlugin.getExtension(StubPlugin.class);
 
     // localReader should be reset
-    localReader = (ConfigurableReader) localPlugin.getReader(LOCAL_READER_NAME);
-    localReaderExtension = localReader.getExtension(StubReader.class);
+    localReader = (ConfigurableCardReader) localPlugin.getReader(LOCAL_READER_NAME);
+    localReaderExtension = localPlugin.getReaderExtension(StubReader.class, localReader.getName());
     // activate ISO_14443_4
     localReader.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
 
     // localReader 2 should be reset
-    localReader2 = (ConfigurableReader) localPlugin.getReader(LOCAL_READER_NAME_2);
-    localReaderExtension2 = localReader2.getExtension(StubReader.class);
+    localReader2 = (ConfigurableCardReader) localPlugin.getReader(LOCAL_READER_NAME_2);
+    localReaderExtension2 =
+        localPlugin.getReaderExtension(StubReader.class, localReader2.getName());
     // activate ISO_14443_4
     localReader2.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
   }
