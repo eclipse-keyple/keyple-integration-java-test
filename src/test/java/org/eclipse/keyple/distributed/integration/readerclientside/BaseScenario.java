@@ -41,18 +41,18 @@ public abstract class BaseScenario {
   private static final Logger logger = LoggerFactory.getLogger(BaseScenario.class);
   public static final String ISO_CARD_PROTOCOL = "ISO_14443_4_CARD";
 
-  public static String LOCAL_PLUGIN_NAME = StubPluginFactoryBuilder.PLUGIN_NAME;
-  public static String LOCAL_READER_NAME = "stubReader";
-  public static String LOCAL_READER_NAME_2 = "stubReader2";
+  public static final String LOCAL_PLUGIN_NAME = StubPluginFactoryBuilder.PLUGIN_NAME;
+  public static final String LOCAL_READER_NAME = "stubReader";
+  public static final String LOCAL_READER_NAME_2 = "stubReader2";
 
-  public static String REMOTE_PLUGIN_NAME = "remotePlugin";
+  public static final String REMOTE_PLUGIN_NAME = "remotePlugin";
 
-  public static String SERVICE_ID_1 = "EXECUTE_CALYPSO_SESSION_FROM_LOCAL_SELECTION";
-  public static String SERVICE_ID_2 = "CREATE_CONFIGURE_OBS_VIRTUAL_READER";
-  public static String SERVICE_ID_3 = "EXECUTE_CALYPSO_SESSION_FROM_REMOTE_SELECTION";
-  public static String SERVICE_ID_4 = "EXECUTE_ALL_METHODS";
+  public static final String SERVICE_ID_1 = "EXECUTE_CALYPSO_SESSION_FROM_LOCAL_SELECTION";
+  public static final String SERVICE_ID_2 = "CREATE_CONFIGURE_OBS_VIRTUAL_READER";
+  public static final String SERVICE_ID_3 = "EXECUTE_CALYPSO_SESSION_FROM_REMOTE_SELECTION";
+  public static final String SERVICE_ID_4 = "EXECUTE_ALL_METHODS";
 
-  public static String DEVICE_ID = "Xo99";
+  public static final String DEVICE_ID = "Xo99";
 
   String localServiceName;
   LocalServiceClient localServiceExtension;
