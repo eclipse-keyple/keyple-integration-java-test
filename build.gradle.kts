@@ -34,7 +34,7 @@ dependencies {
     testImplementation("org.eclipse.keyple:keyple-distributed-network-java-lib:2.2.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-local-java-lib:2.2.0")
     testImplementation("org.eclipse.keyple:keyple-distributed-remote-java-lib:2.2.1")
-    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.2.2-SNAPSHOT") {isChanging=true}
+    testImplementation("org.eclipse.keyple:keyple-service-java-lib:2.3.0-SNAPSHOT") {isChanging=true}
     testImplementation("org.eclipse.keyple:keyple-service-resource-java-lib:2.1.1")
     testImplementation("org.eclipse.keyple:keyple-plugin-cardresource-java-lib:1.0.1")
     testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.1.0")

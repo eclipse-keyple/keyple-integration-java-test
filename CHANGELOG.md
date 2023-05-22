@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Upgraded
 - Calypsonet Terminal Reader API `1.2.0` -> `1.3.0`
-- Keyple Service Lib `2.2.0` -> `2.2.2`
+- Keyple Service Lib `2.2.0` -> `2.3.0`
 - Keyple Distributed Remote Lib `2.2.0` -> `2.2.1`
 - Keyple Card Calypso Lib `2.3.4` -> `2.3.5`
 
