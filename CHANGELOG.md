@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [2023-05-23]
 ### Upgraded
 - Calypsonet Terminal Reader API `1.2.0` -> `1.3.0`
 - Keyple Service Lib `2.2.0` -> `2.3.0`
@@ -97,7 +99,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-27...HEAD
+[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-05-23...HEAD
+[2023-05-23]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-27...2023-05-23
 [2023-04-27]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-05...2023-04-27
 [2023-04-05]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-02-23...2023-04-05
 [2023-02-23]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-12-06...2023-02-23
