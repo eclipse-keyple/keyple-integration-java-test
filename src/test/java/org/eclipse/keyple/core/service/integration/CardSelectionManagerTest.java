@@ -15,13 +15,8 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.calypsonet.terminal.calypso.WriteAccessLevel;
-import org.calypsonet.terminal.calypso.card.CalypsoCardSelection;
-import org.calypsonet.terminal.reader.ConfigurableCardReader;
-import org.calypsonet.terminal.reader.selection.CardSelectionManager;
-import org.calypsonet.terminal.reader.selection.CardSelectionResult;
 import org.eclipse.keyple.card.calypso.CalypsoExtensionService;
-import org.eclipse.keyple.card.generic.GenericCardSelection;
+import org.eclipse.keyple.card.generic.GenericCardSelectionExtension;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.Plugin;
 import org.eclipse.keyple.core.service.SmartCardServiceProvider;
@@ -29,6 +24,11 @@ import org.eclipse.keyple.core.util.HexUtil;
 import org.eclipse.keyple.core.util.json.JsonUtil;
 import org.eclipse.keyple.plugin.stub.StubPluginFactoryBuilder;
 import org.eclipse.keyple.plugin.stub.StubSmartCard;
+import org.eclipse.keypop.calypso.card.WriteAccessLevel;
+import org.eclipse.keypop.calypso.card.card.CalypsoCardSelectionExtension;
+import org.eclipse.keypop.reader.ConfigurableCardReader;
+import org.eclipse.keypop.reader.ReaderApiFactory;
+import org.eclipse.keypop.reader.selection.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -54,176 +54,240 @@ public class CardSelectionManagerTest {
   private static final String READ_CMD = "00B2020C00";
   private static final String READ_RSP = "ABCD9000";
   private static final String EXPORT_JSON_SCENARIO =
-      "{"
-          + "   \"multiSelectionProcessing\":\"FIRST_MATCH\","
-          + "   \"channelControl\":\"KEEP_OPEN\","
-          + "   \"cardSelectionsTypes\":["
-          + "      \"org.eclipse.keyple.card.calypso.CalypsoCardSelectionAdapter\","
-          + "      \"org.eclipse.keyple.card.generic.GenericCardSelectionAdapter\""
-          + "   ],"
-          + "   \"cardSelections\":["
-          + "      {"
-          + "         \"commands\":["
-          + "            {"
-          + "               \"type\":\"org.eclipse.keyple.card.calypso.CmdCardReadRecords\","
-          + "               \"data\":{"
-          + "                  \"sfi\":\"01\","
-          + "                  \"firstRecordNumber\":\"02\","
-          + "                  \"recordSize\":\"00\","
-          + "                  \"readMode\":\"ONE_RECORD\","
-          + "                  \"commandRef\":\"READ_RECORDS\","
-          + "                  \"le\":\"00\","
-          + "                  \"apduRequest\":{"
-          + "                     \"apdu\":\"00B2020C00\","
-          + "                     \"successfulStatusWords\":["
-          + "                        \"9000\""
-          + "                     ],"
-          + "                     \"info\":\"Read Records - SFI: 1h, REC: 2, READMODE: ONE_RECORD, EXPECTEDLENGTH: 0\""
-          + "                  }"
-          + "               }"
-          + "            },"
-          + "            {"
-          + "               \"type\":\"org.eclipse.keyple.card.calypso.CmdCardReadBinary\","
-          + "               \"data\":{"
-          + "                  \"sfi\":\"01\","
-          + "                  \"offset\":\"00\","
-          + "                  \"commandRef\":\"READ_BINARY\","
-          + "                  \"le\":\"0A\","
-          + "                  \"apduRequest\":{"
-          + "                     \"apdu\":\"00B081000A\","
-          + "                     \"successfulStatusWords\":["
-          + "                        \"9000\""
-          + "                     ],"
-          + "                     \"info\":\"Read Binary - SFI:01h, OFFSET:0, LENGTH:10\""
-          + "                  }"
-          + "               }"
-          + "            },"
-          + "            {"
-          + "               \"type\":\"org.eclipse.keyple.card.calypso.CmdCardReadRecords\","
-          + "               \"data\":{"
-          + "                  \"sfi\":\"01\","
-          + "                  \"firstRecordNumber\":\"01\","
-          + "                  \"recordSize\":\"00\","
-          + "                  \"readMode\":\"ONE_RECORD\","
-          + "                  \"commandRef\":\"READ_RECORDS\","
-          + "                  \"le\":\"03\","
-          + "                  \"apduRequest\":{"
-          + "                     \"apdu\":\"00B2010C03\","
-          + "                     \"successfulStatusWords\":["
-          + "                        \"9000\""
-          + "                     ],"
-          + "                     \"info\":\"Read Records - SFI: 1h, REC: 1, READMODE: ONE_RECORD, EXPECTEDLENGTH: 3\""
-          + "                  }"
-          + "               }"
-          + "            },"
-          + "            {"
-          + "               \"type\":\"org.eclipse.keyple.card.calypso.CmdCardOpenSecureSession\","
-          + "               \"data\":{"
-          + "                  \"writeAccessLevel\":\"DEBIT\","
-          + "                  \"isExtendedModeAllowed\":true,"
-          + "                  \"sfi\":\"00\","
-          + "                  \"recordNumber\":\"00\","
-          + "                  \"commandRef\":\"OPEN_SECURE_SESSION\","
-          + "                  \"le\":\"00\","
-          + "                  \"apduRequest\":{"
-          + "                     \"apdu\":\"008A0302010000\","
-          + "                     \"successfulStatusWords\":["
-          + "                        \"9000\""
-          + "                     ],"
-          + "                     \"info\":\"Open Secure Session - KEYINDEX:3, SFI:00h, REC:0 - PREOPEN\""
-          + "                  }"
-          + "               }"
-          + "            }"
-          + "         ],"
-          + "         \"cardSelector\":{"
-          + "            \"cardProtocol\":\"CALYPSO_CARD_PROTOCOL\","
-          + "            \"powerOnDataRegex\":\".*\","
-          + "            \"aid\":\"1122334455\","
-          + "            \"fileOccurrence\":\"FIRST\","
-          + "            \"fileControlInformation\":\"FCI\","
-          + "            \"successfulSelectionStatusWords\":["
-          + "               \"9000\","
-          + "               \"6283\""
-          + "            ]"
-          + "         }"
-          + "      },"
-          + "      {"
-          + "         \"cardSelector\":{"
-          + "            \"cardProtocol\":\"GENERIC_CARD_PROTOCOL\","
-          + "            \"powerOnDataRegex\":\".*\","
-          + "            \"aid\":\"1122334455\","
-          + "            \"fileOccurrence\":\"FIRST\","
-          + "            \"fileControlInformation\":\"FCI\","
-          + "            \"successfulSelectionStatusWords\":["
-          + "               \"9000\""
-          + "            ]"
-          + "         }"
-          + "      }"
-          + "   ],"
-          + "   \"defaultCardSelections\":["
-          + "      {"
-          + "         \"cardSelectionRequest\":{"
-          + "            \"cardSelector\":{"
-          + "               \"cardProtocol\":\"CALYPSO_CARD_PROTOCOL\","
-          + "               \"powerOnDataRegex\":\".*\","
-          + "               \"aid\":\"1122334455\","
-          + "               \"fileOccurrence\":\"FIRST\","
-          + "               \"fileControlInformation\":\"FCI\","
-          + "               \"successfulSelectionStatusWords\":["
-          + "                  \"9000\","
-          + "                  \"6283\""
-          + "               ]"
-          + "            },"
-          + "            \"cardRequest\":{"
-          + "               \"apduRequests\":["
-          + "                  {"
-          + "                     \"apdu\":\"00B2020C00\","
-          + "                     \"successfulStatusWords\":["
-          + "                        \"9000\""
-          + "                     ],"
-          + "                     \"info\":\"Read Records - SFI: 1h, REC: 2, READMODE: ONE_RECORD, EXPECTEDLENGTH: 0\""
-          + "                  },"
-          + "                  {"
-          + "                     \"apdu\":\"00B081000A\","
-          + "                     \"successfulStatusWords\":["
-          + "                        \"9000\""
-          + "                     ],"
-          + "                     \"info\":\"Read Binary - SFI:01h, OFFSET:0, LENGTH:10\""
-          + "                  },"
-          + "                  {"
-          + "                     \"apdu\":\"00B2010C03\","
-          + "                     \"successfulStatusWords\":["
-          + "                        \"9000\""
-          + "                     ],"
-          + "                     \"info\":\"Read Records - SFI: 1h, REC: 1, READMODE: ONE_RECORD, EXPECTEDLENGTH: 3\""
-          + "                  },"
-          + "                  {"
-          + "                     \"apdu\":\"008A0302010000\","
-          + "                     \"successfulStatusWords\":["
-          + "                        \"9000\""
-          + "                     ],"
-          + "                     \"info\":\"Open Secure Session - KEYINDEX:3, SFI:00h, REC:0 - PREOPEN\""
-          + "                  }"
-          + "               ],"
-          + "               \"stopOnUnsuccessfulStatusWord\":false"
-          + "            }"
-          + "         }"
-          + "      },"
-          + "      {"
-          + "         \"cardSelectionRequest\":{"
-          + "            \"cardSelector\":{"
-          + "               \"cardProtocol\":\"GENERIC_CARD_PROTOCOL\","
-          + "               \"powerOnDataRegex\":\".*\","
-          + "               \"aid\":\"1122334455\","
-          + "               \"fileOccurrence\":\"FIRST\","
-          + "               \"fileControlInformation\":\"FCI\","
-          + "               \"successfulSelectionStatusWords\":["
-          + "                  \"9000\""
-          + "               ]"
-          + "            }"
-          + "         }"
-          + "      }"
-          + "   ]"
+      "{\n"
+          + "    \"multiSelectionProcessing\": \"FIRST_MATCH\",\n"
+          + "    \"channelControl\": \"KEEP_OPEN\",\n"
+          + "    \"cardSelectorsTypes\":\n"
+          + "    [\n"
+          + "        \"org.eclipse.keyple.core.service.IsoCardSelectorAdapter\",\n"
+          + "        \"org.eclipse.keyple.core.service.IsoCardSelectorAdapter\"\n"
+          + "    ],\n"
+          + "    \"cardSelectors\":\n"
+          + "    [\n"
+          + "        {\n"
+          + "            \"logicalProtocolName\": \"CALYPSO_CARD_PROTOCOL\",\n"
+          + "            \"powerOnDataRegex\": \".*\",\n"
+          + "            \"aid\": \"1122334455\",\n"
+          + "            \"fileOccurrence\": \"FIRST\",\n"
+          + "            \"fileControlInformation\": \"FCI\"\n"
+          + "        },\n"
+          + "        {\n"
+          + "            \"logicalProtocolName\": \"GENERIC_CARD_PROTOCOL\",\n"
+          + "            \"powerOnDataRegex\": \".*\",\n"
+          + "            \"aid\": \"1122334455\",\n"
+          + "            \"fileOccurrence\": \"FIRST\",\n"
+          + "            \"fileControlInformation\": \"FCI\"\n"
+          + "        }\n"
+          + "    ],\n"
+          + "    \"cardSelectionsTypes\":\n"
+          + "    [\n"
+          + "        \"org.eclipse.keyple.card.calypso.CalypsoCardSelectionExtensionAdapter\",\n"
+          + "        \"org.eclipse.keyple.card.generic.GenericCardSelectionExtensionAdapter\"\n"
+          + "    ],\n"
+          + "    \"cardSelections\":\n"
+          + "    [\n"
+          + "        {\n"
+          + "            \"commands\":\n"
+          + "            [\n"
+          + "                {\n"
+          + "                    \"type\": \"org.eclipse.keyple.card.calypso.CommandReadRecords\",\n"
+          + "                    \"data\":\n"
+          + "                    {\n"
+          + "                        \"sfi\": \"01\",\n"
+          + "                        \"firstRecordNumber\": \"02\",\n"
+          + "                        \"recordSize\": \"00\",\n"
+          + "                        \"readMode\": \"ONE_RECORD\",\n"
+          + "                        \"commandRef\": \"READ_RECORDS\",\n"
+          + "                        \"commandContext\":\n"
+          + "                        {\n"
+          + "                            \"isSecureSessionOpen\": false,\n"
+          + "                            \"isEncryptionActive\": false\n"
+          + "                        },\n"
+          + "                        \"transactionContext\":\n"
+          + "                        {\n"
+          + "                            \"isSecureSessionOpen\": false\n"
+          + "                        },\n"
+          + "                        \"le\": \"00\",\n"
+          + "                        \"apduRequest\":\n"
+          + "                        {\n"
+          + "                            \"apdu\": \"00B2020C00\",\n"
+          + "                            \"successfulStatusWords\":\n"
+          + "                            [\n"
+          + "                                \"9000\"\n"
+          + "                            ],\n"
+          + "                            \"info\": \"Read Records - SFI: 1h, REC: 2, READMODE: ONE_RECORD, EXPECTEDLENGTH: 0\"\n"
+          + "                        }\n"
+          + "                    }\n"
+          + "                },\n"
+          + "                {\n"
+          + "                    \"type\": \"org.eclipse.keyple.card.calypso.CommandReadBinary\",\n"
+          + "                    \"data\":\n"
+          + "                    {\n"
+          + "                        \"sfi\": \"01\",\n"
+          + "                        \"offset\": \"00\",\n"
+          + "                        \"commandRef\": \"READ_BINARY\",\n"
+          + "                        \"commandContext\":\n"
+          + "                        {\n"
+          + "                            \"isSecureSessionOpen\": false,\n"
+          + "                            \"isEncryptionActive\": false\n"
+          + "                        },\n"
+          + "                        \"transactionContext\":\n"
+          + "                        {\n"
+          + "                            \"isSecureSessionOpen\": false\n"
+          + "                        },\n"
+          + "                        \"le\": \"0A\",\n"
+          + "                        \"apduRequest\":\n"
+          + "                        {\n"
+          + "                            \"apdu\": \"00B081000A\",\n"
+          + "                            \"successfulStatusWords\":\n"
+          + "                            [\n"
+          + "                                \"9000\"\n"
+          + "                            ],\n"
+          + "                            \"info\": \"Read Binary - SFI:01h, OFFSET:0, LENGTH:10\"\n"
+          + "                        }\n"
+          + "                    }\n"
+          + "                },\n"
+          + "                {\n"
+          + "                    \"type\": \"org.eclipse.keyple.card.calypso.CommandReadRecords\",\n"
+          + "                    \"data\":\n"
+          + "                    {\n"
+          + "                        \"sfi\": \"01\",\n"
+          + "                        \"firstRecordNumber\": \"01\",\n"
+          + "                        \"recordSize\": \"00\",\n"
+          + "                        \"readMode\": \"ONE_RECORD\",\n"
+          + "                        \"commandRef\": \"READ_RECORDS\",\n"
+          + "                        \"commandContext\":\n"
+          + "                        {\n"
+          + "                            \"isSecureSessionOpen\": false,\n"
+          + "                            \"isEncryptionActive\": false\n"
+          + "                        },\n"
+          + "                        \"transactionContext\":\n"
+          + "                        {\n"
+          + "                            \"isSecureSessionOpen\": false\n"
+          + "                        },\n"
+          + "                        \"le\": \"03\",\n"
+          + "                        \"apduRequest\":\n"
+          + "                        {\n"
+          + "                            \"apdu\": \"00B2010C03\",\n"
+          + "                            \"successfulStatusWords\":\n"
+          + "                            [\n"
+          + "                                \"9000\"\n"
+          + "                            ],\n"
+          + "                            \"info\": \"Read Records - SFI: 1h, REC: 1, READMODE: ONE_RECORD, EXPECTEDLENGTH: 3\"\n"
+          + "                        }\n"
+          + "                    }\n"
+          + "                },\n"
+          + "                {\n"
+          + "                    \"type\": \"org.eclipse.keyple.card.calypso.CommandOpenSecureSession\",\n"
+          + "                    \"data\":\n"
+          + "                    {\n"
+          + "                        \"writeAccessLevel\": \"DEBIT\",\n"
+          + "                        \"isExtendedModeAllowed\": true,\n"
+          + "                        \"sfi\": \"00\",\n"
+          + "                        \"recordNumber\": \"00\",\n"
+          + "                        \"commandRef\": \"OPEN_SECURE_SESSION\",\n"
+          + "                        \"commandContext\":\n"
+          + "                        {\n"
+          + "                            \"isSecureSessionOpen\": false,\n"
+          + "                            \"isEncryptionActive\": false\n"
+          + "                        },\n"
+          + "                        \"transactionContext\":\n"
+          + "                        {\n"
+          + "                            \"isSecureSessionOpen\": false\n"
+          + "                        },\n"
+          + "                        \"le\": \"00\",\n"
+          + "                        \"apduRequest\":\n"
+          + "                        {\n"
+          + "                            \"apdu\": \"008A0302010000\",\n"
+          + "                            \"successfulStatusWords\":\n"
+          + "                            [\n"
+          + "                                \"9000\"\n"
+          + "                            ],\n"
+          + "                            \"info\": \"Open Secure Session - KEYINDEX:3, SFI:00h, REC:0 - PREOPEN\"\n"
+          + "                        }\n"
+          + "                    }\n"
+          + "                }\n"
+          + "            ],\n"
+          + "            \"transactionContext\":\n"
+          + "            {\n"
+          + "                \"isSecureSessionOpen\": false\n"
+          + "            },\n"
+          + "            \"commandContext\":\n"
+          + "            {\n"
+          + "                \"isSecureSessionOpen\": false,\n"
+          + "                \"isEncryptionActive\": false\n"
+          + "            },\n"
+          + "            \"isPreOpenPrepared\": true,\n"
+          + "            \"isInvalidatedCardAccepted\": true\n"
+          + "        },\n"
+          + "        {\n"
+          + "            \"successfulSelectionStatusWords\":\n"
+          + "            [\n"
+          + "                \"9000\"\n"
+          + "            ]\n"
+          + "        }\n"
+          + "    ],\n"
+          + "    \"defaultCardSelections\":\n"
+          + "    [\n"
+          + "        {\n"
+          + "            \"cardSelectionRequest\":\n"
+          + "            {\n"
+          + "                \"cardRequest\":\n"
+          + "                {\n"
+          + "                    \"apduRequests\":\n"
+          + "                    [\n"
+          + "                        {\n"
+          + "                            \"apdu\": \"00B2020C00\",\n"
+          + "                            \"successfulStatusWords\":\n"
+          + "                            [\n"
+          + "                                \"9000\"\n"
+          + "                            ],\n"
+          + "                            \"info\": \"Read Records - SFI: 1h, REC: 2, READMODE: ONE_RECORD, EXPECTEDLENGTH: 0\"\n"
+          + "                        },\n"
+          + "                        {\n"
+          + "                            \"apdu\": \"00B081000A\",\n"
+          + "                            \"successfulStatusWords\":\n"
+          + "                            [\n"
+          + "                                \"9000\"\n"
+          + "                            ],\n"
+          + "                            \"info\": \"Read Binary - SFI:01h, OFFSET:0, LENGTH:10\"\n"
+          + "                        },\n"
+          + "                        {\n"
+          + "                            \"apdu\": \"00B2010C03\",\n"
+          + "                            \"successfulStatusWords\":\n"
+          + "                            [\n"
+          + "                                \"9000\"\n"
+          + "                            ],\n"
+          + "                            \"info\": \"Read Records - SFI: 1h, REC: 1, READMODE: ONE_RECORD, EXPECTEDLENGTH: 3\"\n"
+          + "                        },\n"
+          + "                        {\n"
+          + "                            \"apdu\": \"008A0302010000\",\n"
+          + "                            \"successfulStatusWords\":\n"
+          + "                            [\n"
+          + "                                \"9000\"\n"
+          + "                            ],\n"
+          + "                            \"info\": \"Open Secure Session - KEYINDEX:3, SFI:00h, REC:0 - PREOPEN\"\n"
+          + "                        }\n"
+          + "                    ],\n"
+          + "                    \"stopOnUnsuccessfulStatusWord\": false\n"
+          + "                },\n"
+          + "                \"successfulSelectionStatusWords\":\n"
+          + "                [\n"
+          + "                    \"9000\",\n"
+          + "                    \"6283\"\n"
+          + "                ]\n"
+          + "            }\n"
+          + "        },\n"
+          + "        {\n"
+          + "            \"cardSelectionRequest\":\n"
+          + "            {\n"
+          + "                \"successfulSelectionStatusWords\":\n"
+          + "                [\n"
+          + "                    \"9000\"\n"
+          + "                ]\n"
+          + "            }\n"
+          + "        }\n"
+          + "    ]\n"
           + "}";
   private static JsonObject expectedJsonScenario;
   private static final String EXPORT_JSON_PROCESSED_SCENARIO =
@@ -260,11 +324,13 @@ public class CardSelectionManagerTest {
           + "   }"
           + "]";
   private static JsonArray expectedJsonProcessedScenario;
+  private static ReaderApiFactory readerApiFactory;
 
   ConfigurableCardReader reader;
 
   @BeforeClass
   public static void beforeClass() {
+    readerApiFactory = SmartCardServiceProvider.getService().getReaderApiFactory();
     expectedJsonScenario = JsonUtil.getParser().fromJson(EXPORT_JSON_SCENARIO, JsonObject.class);
     expectedJsonProcessedScenario =
         JsonUtil.getParser().fromJson(EXPORT_JSON_PROCESSED_SCENARIO, JsonArray.class);
@@ -276,29 +342,38 @@ public class CardSelectionManagerTest {
   }
 
   private CardSelectionManager initManagerForExportImportScenario() {
-    CardSelectionManager manager =
-        SmartCardServiceProvider.getService().createCardSelectionManager();
-    manager.prepareSelection(
-        CalypsoExtensionService.getInstance()
-            .createCardSelection()
-            .acceptInvalidatedCard()
+    CardSelectionManager manager = readerApiFactory.createCardSelectionManager();
+
+    CardSelector<IsoCardSelector> cardSelector =
+        readerApiFactory
+            .createIsoCardSelector()
             .filterByCardProtocol(CALYPSO_CARD_PROTOCOL)
             .filterByPowerOnData(POWER_ON_DATA_REGEX)
             .filterByDfName(AID1)
-            .setFileControlInformation(CalypsoCardSelection.FileControlInformation.FCI)
-            .setFileOccurrence(CalypsoCardSelection.FileOccurrence.FIRST)
+            .setFileControlInformation(CommonIsoCardSelector.FileControlInformation.FCI)
+            .setFileOccurrence(CommonIsoCardSelector.FileOccurrence.FIRST);
+    CalypsoCardSelectionExtension calypsoCardSelectionExtension =
+        CalypsoExtensionService.getInstance()
+            .getCalypsoCardApiFactory()
+            .createCalypsoCardSelectionExtension()
+            .acceptInvalidatedCard()
             .prepareReadRecord(SFI, RECORD)
             .prepareReadBinary(SFI, 0, 10)
             .prepareReadCounter(SFI, 1)
-            .preparePreOpenSecureSession(WriteAccessLevel.DEBIT));
-    manager.prepareSelection(
-        GenericExtensionService.getInstance()
-            .createCardSelection()
+            .preparePreOpenSecureSession(WriteAccessLevel.DEBIT);
+    manager.prepareSelection(cardSelector, calypsoCardSelectionExtension);
+
+    cardSelector =
+        readerApiFactory
+            .createIsoCardSelector()
             .filterByCardProtocol(GENERIC_CARD_PROTOCOL)
             .filterByPowerOnData(POWER_ON_DATA_REGEX)
-            .filterByDfName(AID1)
-            .setFileControlInformation(GenericCardSelection.FileControlInformation.FCI)
-            .setFileOccurrence(GenericCardSelection.FileOccurrence.FIRST));
+            .filterByDfName(AID1);
+
+    GenericCardSelectionExtension genericCardSelectionExtension =
+        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
+
+    manager.prepareSelection(cardSelector, genericCardSelectionExtension);
     return manager;
   }
 
@@ -318,15 +393,19 @@ public class CardSelectionManagerTest {
                 StubPluginFactoryBuilder.builder().withStubReader(READER_NAME, true, card).build());
     reader = (ConfigurableCardReader) plugin.getReader(READER_NAME);
     reader.activateProtocol(ISO_CARD_PROTOCOL, ISO_CARD_PROTOCOL);
-    CardSelectionManager manager =
-        SmartCardServiceProvider.getService().createCardSelectionManager();
-    manager.prepareSelection(
-        GenericExtensionService.getInstance().createCardSelection().filterByDfName(AID1));
-    manager.prepareSelection(
+    CardSelectionManager manager = readerApiFactory.createCardSelectionManager();
+    CardSelector<IsoCardSelector> cardSelector =
+        readerApiFactory.createIsoCardSelector().filterByDfName(AID1);
+    GenericCardSelectionExtension genericCardSelectionExtension =
+        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
+    manager.prepareSelection(cardSelector, genericCardSelectionExtension);
+    cardSelector = readerApiFactory.createIsoCardSelector().filterByDfName(AID2);
+    CalypsoCardSelectionExtension calypsoCardSelectionExtension =
         CalypsoExtensionService.getInstance()
-            .createCardSelection()
-            .filterByDfName(AID2)
-            .prepareReadRecord(SFI, RECORD));
+            .getCalypsoCardApiFactory()
+            .createCalypsoCardSelectionExtension()
+            .prepareReadRecord(SFI, RECORD);
+    manager.prepareSelection(cardSelector, calypsoCardSelectionExtension);
     return manager;
   }
 
@@ -341,8 +420,7 @@ public class CardSelectionManagerTest {
     assertThat(resultJson1).isEqualTo(expectedJsonScenario);
 
     // Import
-    CardSelectionManager manager2 =
-        SmartCardServiceProvider.getService().createCardSelectionManager();
+    CardSelectionManager manager2 = readerApiFactory.createCardSelectionManager();
     int index = manager2.importCardSelectionScenario(export1);
     assertThat(index).isEqualTo(1);
 
@@ -366,8 +444,7 @@ public class CardSelectionManagerTest {
     assertThat(resultJson1).isEqualTo(expectedJsonProcessedScenario);
 
     // Import
-    CardSelectionManager manager2 =
-        SmartCardServiceProvider.getService().createCardSelectionManager();
+    CardSelectionManager manager2 = readerApiFactory.createCardSelectionManager();
     manager2.importCardSelectionScenario(scenario);
     CardSelectionResult result2 = manager2.importProcessedCardSelectionScenario(export1);
 

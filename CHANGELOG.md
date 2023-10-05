@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+:warning: Major version! Following the migration of the "Calypsonet Terminal" APIs to the
+[Eclipse Keypop project](https://keypop.org), this integration tests now implements Keypop interfaces.
+
+### Removed
+  - Calypsonet Terminal dependencies.
+
+### Added
+  - Keypop Reader Java API `2.0.0`.
+  - Keypop Calypso Card Java API `2.0.0`.
+  - Keypop Calypso Crypto LegacySAM Java API `2.0.0`.
+
+### Updated
+  - `keyple-distributed-network-java-lib` to `2.3.0`.
+  - `keyple-distributed-local-java-lib` to `2.3.0`.
+  - `keyple-distributed-remote-java-lib` to `2.3.0`.
+  - `keyple-service-java-lib` to `3.0.0`.
+  - `keyple-service-resource-java-lib` to `3.0.0`.
+  - `keyple-plugin-cardresource-java-lib` to `2.0.0`.
+  - `keyple-plugin-stub-java-lib` to `2.2.0`.
+  - `keyple-card-generic-java-lib` to `3.0.0`.
+  - `keyple-card-calypso-java-lib` to `3.0.0`.
+  - `keyple-card-calypso-crypto-legacysam-java-lib` to `0.4.0`.
+  - `keyple-util-java-lib` to `2.3.1`.
 
 ## [2023-05-23]
 ### Upgraded
