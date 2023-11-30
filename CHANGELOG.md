@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [2023-11-30]
 :warning: Major version! Following the migration of the "Calypsonet Terminal" APIs to the
 [Eclipse Keypop project](https://keypop.org), this integration tests now implements Keypop interfaces.
 ### Removed
@@ -119,7 +121,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-05-23...HEAD
+[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-11-30...HEAD
+[2023-11-30]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-05-23...2023-11-30
 [2023-05-23]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-27...2023-05-23
 [2023-04-27]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-05...2023-04-27
 [2023-04-05]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-02-23...2023-04-05
