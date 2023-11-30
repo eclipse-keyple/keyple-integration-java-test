@@ -38,7 +38,7 @@ dependencies {
     testImplementation("org.eclipse.keyple:keyple-service-java-lib:3.0.0")
     testImplementation("org.eclipse.keyple:keyple-service-resource-java-lib:3.0.0")
     testImplementation("org.eclipse.keyple:keyple-plugin-cardresource-java-lib:2.0.0")
-    testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.2.0-SNAPSHOT") { isChanging = true }
+    testImplementation("org.eclipse.keyple:keyple-plugin-stub-java-lib:2.2.0")
     testImplementation("org.eclipse.keyple:keyple-card-generic-java-lib:3.0.0")
     testImplementation("org.eclipse.keyple:keyple-card-calypso-java-lib:3.0.0")
     testImplementation("org.eclipse.keyple:keyple-card-calypso-crypto-legacysam-java-lib:0.4.0")
