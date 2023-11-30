@@ -15,11 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import java.util.concurrent.*;
-import org.calypsonet.terminal.reader.ConfigurableCardReader;
-import org.calypsonet.terminal.reader.selection.CardSelectionManager;
-import org.calypsonet.terminal.reader.selection.CardSelectionResult;
-import org.calypsonet.terminal.reader.selection.spi.CardSelection;
-import org.calypsonet.terminal.reader.selection.spi.SmartCard;
+import org.eclipse.keyple.card.generic.GenericCardSelectionExtension;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.*;
 import org.eclipse.keyple.core.util.HexUtil;
@@ -33,6 +29,14 @@ import org.eclipse.keyple.distributed.integration.readerclientside.model.OutputD
 import org.eclipse.keyple.distributed.integration.util.NamedThreadFactory;
 import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
 import org.eclipse.keyple.plugin.stub.*;
+import org.eclipse.keypop.reader.CardReader;
+import org.eclipse.keypop.reader.ConfigurableCardReader;
+import org.eclipse.keypop.reader.ReaderApiFactory;
+import org.eclipse.keypop.reader.selection.CardSelectionManager;
+import org.eclipse.keypop.reader.selection.CardSelectionResult;
+import org.eclipse.keypop.reader.selection.CardSelector;
+import org.eclipse.keypop.reader.selection.IsoCardSelector;
+import org.eclipse.keypop.reader.selection.spi.SmartCard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +58,8 @@ public abstract class BaseScenario {
 
   public static final String DEVICE_ID = "Xo99";
 
+  public static final ReaderApiFactory readerApiFactory =
+      SmartCardServiceProvider.getService().getReaderApiFactory();
   String localServiceName;
   LocalServiceClient localServiceExtension;
 
@@ -213,15 +219,17 @@ public abstract class BaseScenario {
     SmartCardServiceProvider.getService().checkCardExtension(cardExtension);
 
     // Get the core card selection manager.
-    CardSelectionManager cardSelectionManager =
-        SmartCardServiceProvider.getService().createCardSelectionManager();
+    CardSelectionManager cardSelectionManager = readerApiFactory.createCardSelectionManager();
 
     // Create a card selection using the generic card extension without specifying any filter
     // (protocol/power-on data/DFName).
-    CardSelection cardSelection = cardExtension.createCardSelection();
+    CardSelector<IsoCardSelector> cardSelector = readerApiFactory.createIsoCardSelector();
+
+    GenericCardSelectionExtension genericCardSelectionExtension =
+        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
 
     // Prepare the selection by adding the created generic selection to the card selection scenario.
-    cardSelectionManager.prepareSelection(cardSelection);
+    cardSelectionManager.prepareSelection(cardSelector, genericCardSelectionExtension);
 
     // Actual card communication: run the selection scenario.
     CardSelectionResult selectionResult =
@@ -230,7 +238,7 @@ public abstract class BaseScenario {
     return selectionResult.getActiveSmartCard();
   }
 
-  Callable<Boolean> cardRemoved(final Reader cardReader) {
+  Callable<Boolean> cardRemoved(final CardReader cardReader) {
     return new Callable<Boolean>() {
       @Override
       public Boolean call() throws Exception {

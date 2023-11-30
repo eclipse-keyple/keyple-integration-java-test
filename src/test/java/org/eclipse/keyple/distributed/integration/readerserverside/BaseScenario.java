@@ -14,9 +14,7 @@ package org.eclipse.keyple.distributed.integration.readerserverside;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.shouldHaveThrown;
 
-import org.calypsonet.terminal.calypso.sam.CalypsoSam;
-import org.calypsonet.terminal.reader.CardReader;
-import org.eclipse.keyple.card.calypso.CalypsoExtensionService;
+import org.eclipse.keyple.card.calypso.crypto.legacysam.LegacySamExtensionService;
 import org.eclipse.keyple.core.service.KeyplePluginException;
 import org.eclipse.keyple.core.service.Plugin;
 import org.eclipse.keyple.core.service.PoolPlugin;
@@ -28,6 +26,8 @@ import org.eclipse.keyple.core.service.resource.spi.ReaderConfiguratorSpi;
 import org.eclipse.keyple.core.util.HexUtil;
 import org.eclipse.keyple.plugin.cardresource.CardResourcePluginFactoryBuilder;
 import org.eclipse.keyple.plugin.stub.*;
+import org.eclipse.keypop.calypso.crypto.legacysam.sam.LegacySam;
+import org.eclipse.keypop.reader.CardReader;
 
 public abstract class BaseScenario {
 
@@ -82,9 +82,11 @@ public abstract class BaseScenario {
         .withCardResourceProfiles(
             CardResourceProfileConfigurator.builder(
                     CARD_RESOURCE_PROFILE_NAME,
-                    CalypsoExtensionService.getInstance()
-                        .createSamResourceProfileExtension(
-                            CalypsoExtensionService.getInstance().createSamSelection()))
+                    LegacySamExtensionService.getInstance()
+                        .createLegacySamResourceProfileExtension(
+                            LegacySamExtensionService.getInstance()
+                                .getLegacySamApiFactory()
+                                .createLegacySamSelectionExtension()))
                 .build())
         .configure();
     CardResourceServiceProvider.getService().start();
@@ -108,7 +110,7 @@ public abstract class BaseScenario {
     String r1Name = r1.getName();
     assertThat(r1Name).isNotEmpty();
 
-    CalypsoSam sam1 = (CalypsoSam) remotePlugin.getSelectedSmartCard(r1);
+    LegacySam sam1 = (LegacySam) remotePlugin.getSelectedSmartCard(r1);
     assertThat(sam1).isNotNull();
     assertThat(sam1.getPowerOnData()).isEqualTo(SAM_C1_POWER_ON_DATA);
 
@@ -118,7 +120,7 @@ public abstract class BaseScenario {
     String r2Name = r2.getName();
     assertThat(r2Name).isNotEqualTo(r1Name);
 
-    CalypsoSam sam2 = (CalypsoSam) remotePlugin.getSelectedSmartCard(r2);
+    LegacySam sam2 = (LegacySam) remotePlugin.getSelectedSmartCard(r2);
     assertThat(sam2).isNotNull();
     assertThat(sam2.getPowerOnData()).isEqualTo(SAM_C1_POWER_ON_DATA);
 
@@ -137,7 +139,7 @@ public abstract class BaseScenario {
     String r3Name = r3.getName();
     assertThat(r3Name).isEqualTo(r1Name);
 
-    CalypsoSam sam3 = (CalypsoSam) remotePlugin.getSelectedSmartCard(r3);
+    LegacySam sam3 = (LegacySam) remotePlugin.getSelectedSmartCard(r3);
     assertThat(sam3).isNotNull();
     assertThat(sam3.getPowerOnData()).isEqualTo(SAM_C1_POWER_ON_DATA);
 
