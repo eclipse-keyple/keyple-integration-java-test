@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Changed
+- Java source and target levels `1.6` -> `1.8`
+### Upgraded
+- Gradle `6.8.3` -> `7.6.4`
 
 ## [2023-11-30]
 :warning: Major version! Following the migration of the "Calypsonet Terminal" APIs to the
@@ -108,7 +112,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [2021-10-06]
 ### Added
-- `CHANGELOG.md` file (issue [eclipse/keyple#6]).
+- `CHANGELOG.md` file (issue [eclipse-keyple/keyple#6]).
 - Tests for distributed components.
 - Uses of released dependencies:
   - org.calypsonet.terminal:calypsonet-terminal-reader-java-api:1.0.+
@@ -121,18 +125,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-11-30...HEAD
-[2023-11-30]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-05-23...2023-11-30
-[2023-05-23]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-27...2023-05-23
-[2023-04-27]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-04-05...2023-04-27
-[2023-04-05]: https://github.com/eclipse/keyple-integration-java-test/compare/2023-02-23...2023-04-05
-[2023-02-23]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-12-06...2023-02-23
-[2022-12-06]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-10-27...2022-12-06
-[2022-10-27]: https://github.com/eclipse/keyple-integration-java-test/compare/2022-05-30...2022-10-27
-[2022-05-30]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-12-20...2022-05-30
-[2021-12-20]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-12-08...2021-12-20
-[2021-12-08]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-11-22...2021-12-08
-[2021-11-22]: https://github.com/eclipse/keyple-integration-java-test/compare/2021-10-06...2021-11-22
-[2021-10-06]: https://github.com/eclipse/keyple-integration-java-test/releases/tag/2021-10-06
+[unreleased]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-11-30...HEAD
+[2023-11-30]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-05-23...2023-11-30
+[2023-05-23]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-04-27...2023-05-23
+[2023-04-27]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-04-05...2023-04-27
+[2023-04-05]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-02-23...2023-04-05
+[2023-02-23]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2022-12-06...2023-02-23
+[2022-12-06]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2022-10-27...2022-12-06
+[2022-10-27]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2022-05-30...2022-10-27
+[2022-05-30]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2021-12-20...2022-05-30
+[2021-12-20]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2021-12-08...2021-12-20
+[2021-12-08]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2021-11-22...2021-12-08
+[2021-11-22]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2021-10-06...2021-11-22
+[2021-10-06]: https://github.com/eclipse-keyple/keyple-integration-java-test/releases/tag/2021-10-06
 
-[eclipse/keyple#6]: https://github.com/eclipse/keyple/issues/6
+[eclipse-keyple/keyple#6]: https://github.com/eclipse-keyple/keyple/issues/6
