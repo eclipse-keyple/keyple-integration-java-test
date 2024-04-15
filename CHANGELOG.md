@@ -9,7 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Java source and target levels `1.6` -> `1.8`
 ### Upgraded
-- Gradle `6.8.3` -> `7.6.4``keypop-reader-java-api:2.0.1`
+- Gradle `6.8.3` -> `7.6.4`
+- `keypop-reader-java-api:2.0.1`
 - `keypop-calypso-card-java-api:2.1.0`
 - `keypop-calypso-crypto-legacysam-java-api:0.5.0`
 - `keyple-common-java-api:2.0.1`
