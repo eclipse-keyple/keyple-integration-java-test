@@ -40,7 +40,7 @@ public abstract class BaseScenario {
   public static final String LOCAL_CARDRESOURCE_PLUGIN_NAME = "cardResourcePlugin";
   public static final String LOCAL_SERVICE_NAME = "localService";
 
-  public static String REMOTE_PLUGIN_NAME = "remotePlugin";
+  public static final String REMOTE_PLUGIN_NAME = "remotePlugin";
 
   Plugin localPlugin;
 
@@ -50,6 +50,7 @@ public abstract class BaseScenario {
     return StubSmartCard.builder()
         .withPowerOnData(HexUtil.toByteArray(SAM_C1_POWER_ON_DATA))
         .withProtocol(ISO_CARD_PROTOCOL)
+        .withSimulatedCommand("8084000008", "11223344556677889000") // Get Challenge
         .build();
   }
 

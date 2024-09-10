@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2024-09-10]
+### Upgraded
+- `keypop-calypso-crypto-legacysam-java-api:0.6.0`
+- `keyple-service-java-lib:3.3.0`
+- `keyple-service-resource-java-lib:3.1.0`
+- `keyple-distributed-local-java-lib:2.5.0`
+- `keyple-distributed-remote-java-lib:2.5.0`
+- `keyple-card-calypso-java-lib:3.1.2`
+- `keyple-card-generic-java-lib:3.1.0`
+- `keyple-card-calypso-crypto-legacysam-java-lib:0.8.0`
+- `keyple-plugin-cardresource-java-lib:2.1.0`
+
 ## [2024-04-15]
 ### Changed
 - Java source and target levels `1.6` -> `1.8`
@@ -142,7 +154,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2024-04-15...HEAD
+[unreleased]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2024-09-10...HEAD
+[2024-09-10]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2024-04-15...2024-09-10
 [2024-04-15]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-11-30...2024-04-15
 [2023-11-30]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-05-23...2023-11-30
 [2023-05-23]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-04-27...2023-05-23
