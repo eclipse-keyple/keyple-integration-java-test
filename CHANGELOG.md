@@ -5,11 +5,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2025-03-21]
+### Upgraded
+- `keypop-calypso-card-java-api:2.1.2`
+- `keypop-calypso-crypto-legacysam-java-api:0.7.0`
+- `keyple-service-java-lib:3.3.5`
+- `keyple-distributed-network-java-lib:2.5.1`
+- `keyple-distributed-local-java-lib:2.5.2`
+- `keyple-distributed-remote-java-lib:2.5.1`
+- `keyple-card-generic-java-lib:3.1.2`
+- `keyple-card-calypso-java-lib:3.1.7`
+- `keyple-card-calypso-crypto-legacysam-java-lib:0.9.0`
+
 ## [2024-09-10]
 ### Upgraded
 - `keypop-calypso-crypto-legacysam-java-api:0.6.0`
 - `keyple-service-java-lib:3.3.0`
 - `keyple-service-resource-java-lib:3.1.0`
+- `keyple-distributed-network-java-lib:2.5.0`
 - `keyple-distributed-local-java-lib:2.5.0`
 - `keyple-distributed-remote-java-lib:2.5.0`
 - `keyple-card-calypso-java-lib:3.1.2`

@@ -11,11 +11,17 @@
  ************************************************************************************** */
 package org.eclipse.keyple.distributed.integration.readerserverside;
 
+import org.eclipse.keyple.card.calypso.CalypsoExtensionService;
+import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.PoolPlugin;
 import org.eclipse.keyple.core.service.SmartCardServiceProvider;
 import org.eclipse.keyple.distributed.*;
 import org.eclipse.keyple.distributed.integration.readerserverside.endpoint.StubSyncEndpointClient;
 import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
+import org.eclipse.keypop.reader.ObservableCardReader;
+import org.eclipse.keypop.reader.ReaderApiFactory;
+import org.eclipse.keypop.reader.selection.CardSelectionManager;
+import org.eclipse.keypop.reader.selection.CommonIsoCardSelector;
 import org.junit.After;
 import org.junit.Test;
 
@@ -49,8 +55,39 @@ public class SyncScenarioITest extends BaseScenario {
             RemotePluginClientFactoryBuilder.builder(REMOTE_PLUGIN_NAME)
                 .withSyncNode(endpointClient)
                 .withoutPluginObservation()
-                .withoutReaderObservation()
+                .withReaderObservation()
+                .withReaderPollingStrategy(1000)
                 .build());
+
+    // Schedule a card selection scenario
+    ObservableCardReader reader =
+        (ObservableCardReader)
+            SmartCardServiceProvider.getService()
+                .getPlugin(REMOTE_PLUGIN_NAME)
+                .getReader(LOCAL_READER_NAME_1);
+
+    ReaderApiFactory readerApiFactory = SmartCardServiceProvider.getService().getReaderApiFactory();
+
+    CardSelectionManager cardSelectionManager = readerApiFactory.createCardSelectionManager();
+    cardSelectionManager.prepareSelection(
+        readerApiFactory
+            .createBasicCardSelector()
+            .filterByCardProtocol("AA")
+            .filterByPowerOnData("BB"),
+        GenericExtensionService.getInstance().createGenericCardSelectionExtension());
+    cardSelectionManager.prepareSelection(
+        readerApiFactory
+            .createIsoCardSelector()
+            .filterByCardProtocol("CC")
+            .filterByPowerOnData("DD")
+            .filterByDfName("EE")
+            .setFileOccurrence(CommonIsoCardSelector.FileOccurrence.FIRST)
+            .setFileControlInformation(CommonIsoCardSelector.FileControlInformation.FCI),
+        CalypsoExtensionService.getInstance()
+            .getCalypsoCardApiFactory()
+            .createCalypsoCardSelectionExtension());
+    cardSelectionManager.scheduleCardSelectionScenario(
+        reader, ObservableCardReader.NotificationMode.ALWAYS);
   }
 
   @Test
