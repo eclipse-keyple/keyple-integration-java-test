@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Changed
+- Changed License from `EPL v1.0` to `EDL v1.0`
+- Migrated the CI pipeline from Jenkins to GitHub Actions.
+### Upgraded
+- `keyple-common-java-api:2.0.2`
+- `keyple-card-calypso-java-lib:3.1.8`
 
 ## [2025-03-21]
 ### Upgraded

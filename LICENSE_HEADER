@@ -1,5 +1,5 @@
 /* **************************************************************************************
- * Copyright (c) 2021 Calypso Networks Association https://calypsonet.org/
+ * Copyright (c) $YEAR Calypso Networks Association https://calypsonet.org/
  *
  * See the NOTICE file(s) distributed with this work for additional information
  * regarding copyright ownership.
@@ -10,18 +10,3 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ************************************************************************************** */
-package org.eclipse.keyple.distributed.integration.readerclientside.model;
-
-public class InputDataDto {
-
-  private String userId;
-
-  public InputDataDto setUserId(String userId) {
-    this.userId = userId;
-    return this;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-}
