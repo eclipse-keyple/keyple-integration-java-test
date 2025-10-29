@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [2025-10-29]
 ### Changed
+- Switched to [Keyple Java BOM](https://github.com/eclipse-keyple/keyple-java-bom) `2025.10.24` for dependency
+  management, replacing individual Keyple component definitions.
 - Changed License from `EPL v1.0` to `EDL v1.0`
 - Migrated the CI pipeline from Jenkins to GitHub Actions.
-### Upgraded
-- `keyple-common-java-api:2.0.2`
-- `keyple-card-calypso-java-lib:3.1.8`
 
 ## [2025-03-21]
 ### Upgraded
@@ -173,7 +174,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2025-03-21...HEAD
+[unreleased]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2025-10-29...HEAD
+[2025-10-29]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2025-03-21...2025-10-29
 [2025-03-21]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2024-09-10...2025-03-21
 [2024-09-10]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2024-04-15...2024-09-10
 [2024-04-15]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2023-11-30...2024-04-15
