@@ -13,7 +13,7 @@
 package org.eclipse.keyple.distributed.integration.readerclientside.app;
 
 import java.util.List;
-import org.eclipse.keyple.card.generic.ChannelControl;
+import org.eclipse.keyple.card.generic.CardTransactionManager;
 import org.eclipse.keyple.card.generic.GenericCardSelectionExtension;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.Plugin;
@@ -27,6 +27,7 @@ import org.eclipse.keyple.distributed.integration.readerclientside.endpoint.Stub
 import org.eclipse.keyple.distributed.integration.readerclientside.model.InputDataDto;
 import org.eclipse.keyple.distributed.integration.readerclientside.model.OutputDataDto;
 import org.eclipse.keypop.reader.CardReader;
+import org.eclipse.keypop.reader.ChannelControl;
 import org.eclipse.keypop.reader.ReaderApiFactory;
 import org.eclipse.keypop.reader.selection.CardSelectionManager;
 import org.eclipse.keypop.reader.selection.CardSelectionResult;
@@ -78,11 +79,12 @@ public class RemotePluginServerObserver implements PluginObserverSpi {
       InputDataDto inputDataDto = readerExtension.getInputData(InputDataDto.class);
       try {
         // execute a transaction
-        List<String> results =
+        CardTransactionManager transaction =
             GenericExtensionService.getInstance()
                 .createCardTransaction(reader, card)
                 .prepareApdu("0000000000")
-                .processApdusToHexStrings(ChannelControl.CLOSE_AFTER);
+                .processCommands(ChannelControl.CLOSE_AFTER);
+        List<String> results = transaction.getResponsesAsHexStrings();
         return new OutputDataDto().setUserId(inputDataDto.getUserId()).setSuccessful(true);
       } catch (RuntimeException e) {
         if (e instanceof StubNetworkConnectionException) {
@@ -100,11 +102,12 @@ public class RemotePluginServerObserver implements PluginObserverSpi {
       SmartCard card = explicitCardSelection(reader);
       try {
         // execute a transaction
-        List<String> results =
+        CardTransactionManager transaction =
             GenericExtensionService.getInstance()
                 .createCardTransaction(reader, card)
                 .prepareApdu("0000000000")
-                .processApdusToHexStrings(ChannelControl.CLOSE_AFTER);
+                .processCommands(ChannelControl.CLOSE_AFTER);
+        List<String> results = transaction.getResponsesAsHexStrings();
         return new OutputDataDto().setUserId(inputDataDto.getUserId()).setSuccessful(true);
       } catch (RuntimeException e) {
         if (e instanceof StubNetworkConnectionException) {
