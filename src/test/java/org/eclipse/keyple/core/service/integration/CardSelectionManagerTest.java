@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.eclipse.keyple.card.calypso.CalypsoExtensionService;
-import org.eclipse.keyple.card.generic.GenericCardSelectionExtension;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.Plugin;
 import org.eclipse.keyple.core.service.SmartCardServiceProvider;
@@ -27,6 +26,7 @@ import org.eclipse.keyple.plugin.stub.StubPluginFactoryBuilder;
 import org.eclipse.keyple.plugin.stub.StubSmartCard;
 import org.eclipse.keypop.calypso.card.WriteAccessLevel;
 import org.eclipse.keypop.calypso.card.card.CalypsoCardSelectionExtension;
+import org.eclipse.keypop.genericcard.GenericCardSelectionExtension;
 import org.eclipse.keypop.reader.ConfigurableCardReader;
 import org.eclipse.keypop.reader.ReaderApiFactory;
 import org.eclipse.keypop.reader.selection.*;
@@ -332,7 +332,9 @@ public class CardSelectionManagerTest {
             .filterByDfName(AID1);
 
     GenericCardSelectionExtension genericCardSelectionExtension =
-        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
+        GenericExtensionService.getInstance()
+            .getGenericCardApiFactory()
+            .createGenericCardSelectionExtension();
 
     manager.prepareSelection(cardSelector, genericCardSelectionExtension);
     return manager;
@@ -358,7 +360,9 @@ public class CardSelectionManagerTest {
     CardSelector<IsoCardSelector> cardSelector =
         readerApiFactory.createIsoCardSelector().filterByDfName(AID1);
     GenericCardSelectionExtension genericCardSelectionExtension =
-        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
+        GenericExtensionService.getInstance()
+            .getGenericCardApiFactory()
+            .createGenericCardSelectionExtension();
     manager.prepareSelection(cardSelector, genericCardSelectionExtension);
     cardSelector = readerApiFactory.createIsoCardSelector().filterByDfName(AID2);
     CalypsoCardSelectionExtension calypsoCardSelectionExtension =

@@ -75,7 +75,9 @@ public class SyncScenarioITest extends BaseScenario {
             .createBasicCardSelector()
             .filterByCardProtocol("AA")
             .filterByPowerOnData("BB"),
-        GenericExtensionService.getInstance().createGenericCardSelectionExtension());
+        GenericExtensionService.getInstance()
+            .getGenericCardApiFactory()
+            .createGenericCardSelectionExtension());
     cardSelectionManager.prepareSelection(
         readerApiFactory
             .createIsoCardSelector()

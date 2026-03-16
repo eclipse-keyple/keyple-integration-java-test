@@ -13,7 +13,6 @@
 package org.eclipse.keyple.distributed.integration.readerclientside.app;
 
 import java.util.List;
-import org.eclipse.keyple.card.generic.GenericCardSelectionExtension;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.Plugin;
 import org.eclipse.keyple.core.service.PluginEvent;
@@ -25,6 +24,7 @@ import org.eclipse.keyple.distributed.integration.readerclientside.BaseScenario;
 import org.eclipse.keyple.distributed.integration.readerclientside.endpoint.StubNetworkConnectionException;
 import org.eclipse.keyple.distributed.integration.readerclientside.model.InputDataDto;
 import org.eclipse.keyple.distributed.integration.readerclientside.model.OutputDataDto;
+import org.eclipse.keypop.genericcard.GenericCardSelectionExtension;
 import org.eclipse.keypop.reader.CardReader;
 import org.eclipse.keypop.reader.ChannelControl;
 import org.eclipse.keypop.reader.ReaderApiFactory;
@@ -80,6 +80,7 @@ public class RemotePluginServerObserver implements PluginObserverSpi {
         // execute a transaction
         List<String> results =
             GenericExtensionService.getInstance()
+                .getGenericCardApiFactory()
                 .createCardTransaction(reader, card)
                 .prepareApdu("0000000000")
                 .processCommands(ChannelControl.CLOSE_AFTER)
@@ -103,6 +104,7 @@ public class RemotePluginServerObserver implements PluginObserverSpi {
         // execute a transaction
         List<String> results =
             GenericExtensionService.getInstance()
+                .getGenericCardApiFactory()
                 .createCardTransaction(reader, card)
                 .prepareApdu("0000000000")
                 .processCommands(ChannelControl.CLOSE_AFTER)
@@ -154,7 +156,9 @@ public class RemotePluginServerObserver implements PluginObserverSpi {
 
     // Prepare the selection by adding the created generic selection to the card selection scenario.
     GenericCardSelectionExtension genericCardSelectionExtension =
-        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
+        GenericExtensionService.getInstance()
+            .getGenericCardApiFactory()
+            .createGenericCardSelectionExtension();
     cardSelectionManager.prepareSelection(cardSelector, genericCardSelectionExtension);
 
     // Actual card communication: run the selection scenario.
