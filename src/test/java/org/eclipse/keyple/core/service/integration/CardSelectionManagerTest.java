@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.eclipse.keyple.card.calypso.CalypsoExtensionService;
-import org.eclipse.keyple.card.generic.GenericCardSelectionExtension;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.Plugin;
 import org.eclipse.keyple.core.service.SmartCardServiceProvider;
@@ -27,6 +26,7 @@ import org.eclipse.keyple.plugin.stub.StubPluginFactoryBuilder;
 import org.eclipse.keyple.plugin.stub.StubSmartCard;
 import org.eclipse.keypop.calypso.card.WriteAccessLevel;
 import org.eclipse.keypop.calypso.card.card.CalypsoCardSelectionExtension;
+import org.eclipse.keypop.genericcard.GenericCardSelectionExtension;
 import org.eclipse.keypop.reader.ConfigurableCardReader;
 import org.eclipse.keypop.reader.ReaderApiFactory;
 import org.eclipse.keypop.reader.selection.*;
@@ -105,7 +105,7 @@ public class CardSelectionManagerTest {
           + "                     \"successfulStatusWords\":["
           + "                        \"9000\""
           + "                     ],"
-          + "                     \"info\":\"Read Records - sfi: 01h, rec: 2, read mode: ONE_RECORD, expected length: null\""
+          + "                     \"info\":\"Read Records - SFI: 01h, Rec: 2, Read mode: ONE_RECORD, Expected length: null\""
           + "                  }"
           + "               }"
           + "            },"
@@ -128,7 +128,7 @@ public class CardSelectionManagerTest {
           + "                     \"successfulStatusWords\":["
           + "                        \"9000\""
           + "                     ],"
-          + "                     \"info\":\"Read Binary - sfi: 01h, offset: 0, length: 10\""
+          + "                     \"info\":\"Read Binary - SFI: 01h, Offset: 0, Length: 10\""
           + "                  }"
           + "               }"
           + "            },"
@@ -153,7 +153,7 @@ public class CardSelectionManagerTest {
           + "                     \"successfulStatusWords\":["
           + "                        \"9000\""
           + "                     ],"
-          + "                     \"info\":\"Read Records - sfi: 01h, rec: 1, read mode: ONE_RECORD, expected length: 3\""
+          + "                     \"info\":\"Read Records - SFI: 01h, Rec: 1, Read mode: ONE_RECORD, Expected length: 3\""
           + "                  }"
           + "               }"
           + "            },"
@@ -178,7 +178,7 @@ public class CardSelectionManagerTest {
           + "                     \"successfulStatusWords\":["
           + "                        \"9000\""
           + "                     ],"
-          + "                     \"info\":\"Open Secure Session - key index: 3, sfi: 00h, rec: 0 - pre-open\""
+          + "                     \"info\":\"Open Secure Session - Key index: 3, SFI: 00h, Rec: 0 - PRE-OPEN\""
           + "                  }"
           + "               }"
           + "            }"
@@ -209,28 +209,28 @@ public class CardSelectionManagerTest {
           + "                     \"successfulStatusWords\":["
           + "                        \"9000\""
           + "                     ],"
-          + "                     \"info\":\"Read Records - sfi: 01h, rec: 2, read mode: ONE_RECORD, expected length: null\""
+          + "                     \"info\":\"Read Records - SFI: 01h, Rec: 2, Read mode: ONE_RECORD, Expected length: null\""
           + "                  },"
           + "                  {"
           + "                     \"apdu\":\"00B081000A\","
           + "                     \"successfulStatusWords\":["
           + "                        \"9000\""
           + "                     ],"
-          + "                     \"info\":\"Read Binary - sfi: 01h, offset: 0, length: 10\""
+          + "                     \"info\":\"Read Binary - SFI: 01h, Offset: 0, Length: 10\""
           + "                  },"
           + "                  {"
           + "                     \"apdu\":\"00B2010C03\","
           + "                     \"successfulStatusWords\":["
           + "                        \"9000\""
           + "                     ],"
-          + "                     \"info\":\"Read Records - sfi: 01h, rec: 1, read mode: ONE_RECORD, expected length: 3\""
+          + "                     \"info\":\"Read Records - SFI: 01h, Rec: 1, Read mode: ONE_RECORD, Expected length: 3\""
           + "                  },"
           + "                  {"
           + "                     \"apdu\":\"008A0302010000\","
           + "                     \"successfulStatusWords\":["
           + "                        \"9000\""
           + "                     ],"
-          + "                     \"info\":\"Open Secure Session - key index: 3, sfi: 00h, rec: 0 - pre-open\""
+          + "                     \"info\":\"Open Secure Session - Key index: 3, SFI: 00h, Rec: 0 - PRE-OPEN\""
           + "                  }"
           + "               ],"
           + "               \"stopOnUnsuccessfulStatusWord\":false"
@@ -332,7 +332,9 @@ public class CardSelectionManagerTest {
             .filterByDfName(AID1);
 
     GenericCardSelectionExtension genericCardSelectionExtension =
-        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
+        GenericExtensionService.getInstance()
+            .getGenericCardApiFactory()
+            .createGenericCardSelectionExtension();
 
     manager.prepareSelection(cardSelector, genericCardSelectionExtension);
     return manager;
@@ -358,7 +360,9 @@ public class CardSelectionManagerTest {
     CardSelector<IsoCardSelector> cardSelector =
         readerApiFactory.createIsoCardSelector().filterByDfName(AID1);
     GenericCardSelectionExtension genericCardSelectionExtension =
-        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
+        GenericExtensionService.getInstance()
+            .getGenericCardApiFactory()
+            .createGenericCardSelectionExtension();
     manager.prepareSelection(cardSelector, genericCardSelectionExtension);
     cardSelector = readerApiFactory.createIsoCardSelector().filterByDfName(AID2);
     CalypsoCardSelectionExtension calypsoCardSelectionExtension =

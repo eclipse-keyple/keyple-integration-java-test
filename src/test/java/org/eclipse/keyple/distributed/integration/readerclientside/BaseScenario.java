@@ -16,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import java.util.concurrent.*;
-import org.eclipse.keyple.card.generic.GenericCardSelectionExtension;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.*;
 import org.eclipse.keyple.core.util.HexUtil;
@@ -30,6 +29,7 @@ import org.eclipse.keyple.distributed.integration.readerclientside.model.OutputD
 import org.eclipse.keyple.distributed.integration.util.NamedThreadFactory;
 import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
 import org.eclipse.keyple.plugin.stub.*;
+import org.eclipse.keypop.genericcard.GenericCardSelectionExtension;
 import org.eclipse.keypop.reader.CardReader;
 import org.eclipse.keypop.reader.ConfigurableCardReader;
 import org.eclipse.keypop.reader.ReaderApiFactory;
@@ -227,7 +227,9 @@ public abstract class BaseScenario {
     CardSelector<IsoCardSelector> cardSelector = readerApiFactory.createIsoCardSelector();
 
     GenericCardSelectionExtension genericCardSelectionExtension =
-        GenericExtensionService.getInstance().createGenericCardSelectionExtension();
+        GenericExtensionService.getInstance()
+            .getGenericCardApiFactory()
+            .createGenericCardSelectionExtension();
 
     // Prepare the selection by adding the created generic selection to the card selection scenario.
     cardSelectionManager.prepareSelection(cardSelector, genericCardSelectionExtension);
