@@ -24,6 +24,7 @@ import org.eclipse.keyple.distributed.integration.readerclientside.BaseScenario;
 import org.eclipse.keyple.distributed.integration.readerclientside.endpoint.StubNetworkConnectionException;
 import org.eclipse.keyple.distributed.integration.readerclientside.model.InputDataDto;
 import org.eclipse.keyple.distributed.integration.readerclientside.model.OutputDataDto;
+import org.eclipse.keypop.genericcard.GenericCardSelectionExtension;
 import org.eclipse.keypop.reader.CardReader;
 import org.eclipse.keypop.reader.ChannelControl;
 import org.eclipse.keypop.reader.ReaderApiFactory;
@@ -32,7 +33,6 @@ import org.eclipse.keypop.reader.selection.CardSelectionResult;
 import org.eclipse.keypop.reader.selection.CardSelector;
 import org.eclipse.keypop.reader.selection.IsoCardSelector;
 import org.eclipse.keypop.reader.selection.spi.SmartCard;
-import org.eclipse.keypop.genericcard.GenericCardSelectionExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
