@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2026-03-17]
+### Upgraded
+- Upgraded [Keyple Java BOM](https://github.com/eclipse-keyple/keyple-java-bom) to `2026.03.16`
+
 ## [2025-11-27]
 ### Upgraded
 - Upgraded [Keyple Java BOM](https://github.com/eclipse-keyple/keyple-java-bom) to `2025.11.21`
@@ -178,7 +182,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - org.eclipse.keyple:keyple-card-generic-java-lib:2.0.0
   - org.eclipse.keyple:keyple-util-java-lib:2.+
 
-[unreleased]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2025-11-27...HEAD
+[unreleased]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2026-03-17...HEAD
+[2026-03-17]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2025-11-27...2026-03-17
 [2025-11-27]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2025-10-29...2025-11-27
 [2025-10-29]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2025-03-21...2025-10-29
 [2025-03-21]: https://github.com/eclipse-keyple/keyple-integration-java-test/compare/2024-09-10...2025-03-21
