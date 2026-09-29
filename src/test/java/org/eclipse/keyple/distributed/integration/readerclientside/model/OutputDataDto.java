@@ -16,6 +16,8 @@ public class OutputDataDto {
 
   private Boolean isSuccessful;
   private String userId;
+  private String errorClassName;
+  private String errorMessage;
 
   public OutputDataDto setSuccessful(Boolean successful) {
     isSuccessful = successful;
@@ -25,6 +27,24 @@ public class OutputDataDto {
   public OutputDataDto setUserId(String userId) {
     this.userId = userId;
     return this;
+  }
+
+  public OutputDataDto setErrorClassName(String errorClassName) {
+    this.errorClassName = errorClassName;
+    return this;
+  }
+
+  public OutputDataDto setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+    return this;
+  }
+
+  public String getErrorClassName() {
+    return errorClassName;
+  }
+
+  public String getErrorMessage() {
+    return errorMessage;
   }
 
   public Boolean isSuccessful() {

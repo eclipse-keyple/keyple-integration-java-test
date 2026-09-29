@@ -12,13 +12,17 @@
  ************************************************************************************** */
 package org.eclipse.keyple.distributed.integration.readerserverside;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.eclipse.keyple.card.calypso.CalypsoExtensionService;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
+import org.eclipse.keyple.core.service.ObservablePlugin;
 import org.eclipse.keyple.core.service.PoolPlugin;
 import org.eclipse.keyple.core.service.SmartCardServiceProvider;
 import org.eclipse.keyple.distributed.*;
 import org.eclipse.keyple.distributed.integration.readerserverside.endpoint.StubSyncEndpointClient;
 import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
+import org.eclipse.keypop.reader.CardReader;
 import org.eclipse.keypop.reader.ObservableCardReader;
 import org.eclipse.keypop.reader.ReaderApiFactory;
 import org.eclipse.keypop.reader.selection.CardSelectionManager;
@@ -91,6 +95,98 @@ public class SyncScenarioITest extends BaseScenario {
             .createCalypsoCardSelectionExtension());
     cardSelectionManager.scheduleCardSelectionScenario(
         reader, ObservableCardReader.NotificationMode.ALWAYS);
+  }
+
+  /** Registers the local service on the server, with a sync node and the local stub plugin. */
+  private void initServerWithSyncNode() {
+    initLocalStubPlugin();
+    // The server application must define the observation exception handlers of its local plugin and
+    // readers, so that the remote clients can observe them.
+    ((ObservablePlugin) localPlugin).setPluginObservationExceptionHandler((pluginName, e) -> {});
+    for (CardReader localReader : localPlugin.getReaders()) {
+      ((ObservableCardReader) localReader)
+          .setReaderObservationExceptionHandler((pluginName, readerName, e) -> {});
+    }
+    SmartCardServiceProvider.getService()
+        .registerDistributedLocalService(
+            LocalServiceServerFactoryBuilder.builder(LOCAL_SERVICE_NAME).withSyncNode().build());
+  }
+
+  @Test
+  public void execute_readerObservation_withLongPolling_shouldNotifyCardEvents() {
+
+    initServerWithSyncNode();
+    SmartCardServiceProvider.getService()
+        .registerPlugin(
+            RemotePluginClientFactoryBuilder.builder(REMOTE_PLUGIN_NAME)
+                .withSyncNode(endpointClient)
+                .withoutPluginObservation()
+                .withReaderObservation()
+                .withReaderLongPollingStrategy(5000)
+                .build());
+
+    executeReaderObservationScenario(0);
+  }
+
+  /**
+   * The long polling duration requested by the client (60 s) exceeds the server timeout (20 s by
+   * default): the server returns an empty response after its timeout and the client must keep on
+   * observing the events.
+   */
+  @Test
+  public void
+      execute_readerObservation_withLongPollingLongerThanServerTimeout_shouldNotifyCardEvents() {
+
+    initServerWithSyncNode();
+    SmartCardServiceProvider.getService()
+        .registerPlugin(
+            RemotePluginClientFactoryBuilder.builder(REMOTE_PLUGIN_NAME)
+                .withSyncNode(endpointClient)
+                .withoutPluginObservation()
+                .withReaderObservation()
+                .withReaderLongPollingStrategy(60000)
+                .build());
+
+    executeReaderObservationScenario(22000);
+  }
+
+  @Test
+  public void execute_pluginObservation_withLongPolling_shouldNotifyReaderEvents() {
+
+    initServerWithSyncNode();
+    SmartCardServiceProvider.getService()
+        .registerPlugin(
+            RemotePluginClientFactoryBuilder.builder(REMOTE_PLUGIN_NAME)
+                .withSyncNode(endpointClient)
+                .withPluginObservation()
+                .withPluginLongPollingStrategy(5000)
+                .withoutReaderObservation()
+                .build());
+
+    executePluginObservationScenario();
+  }
+
+  @Test
+  public void
+      execute_pluginAndReaderObservation_withLongPolling_shouldProvideObservableConnectedReaders() {
+
+    initServerWithSyncNode();
+    SmartCardServiceProvider.getService()
+        .registerPlugin(
+            RemotePluginClientFactoryBuilder.builder(REMOTE_PLUGIN_NAME)
+                .withSyncNode(endpointClient)
+                .withPluginObservation()
+                .withPluginLongPollingStrategy(5000)
+                .withReaderObservation()
+                .withReaderLongPollingStrategy(5000)
+                .build());
+    assertThat(
+            SmartCardServiceProvider.getService()
+                .getPlugin(REMOTE_PLUGIN_NAME)
+                .getReader(LOCAL_READER_NAME_1))
+        .isInstanceOf(ObservableCardReader.class);
+
+    executePluginObservationScenario();
   }
 
   @Test

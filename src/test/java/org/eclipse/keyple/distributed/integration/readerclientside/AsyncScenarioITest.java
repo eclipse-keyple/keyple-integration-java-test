@@ -137,4 +137,14 @@ public class AsyncScenarioITest extends BaseScenario {
   public void execute_all_methods() {
     all_methods();
   }
+
+  @Test
+  public void execute_remoteError_withKeypopException_keepsItsType() {
+    remoteError_withKeypopException_keepsItsType();
+  }
+
+  @Test
+  public void execute_remoteError_withThirdPartyException_isProvidedAsRuntimeException() {
+    remoteError_withThirdPartyException_isProvidedAsRuntimeException();
+  }
 }

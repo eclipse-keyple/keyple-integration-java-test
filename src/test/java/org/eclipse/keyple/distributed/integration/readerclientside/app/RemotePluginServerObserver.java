@@ -13,6 +13,7 @@
 package org.eclipse.keyple.distributed.integration.readerclientside.app;
 
 import java.util.List;
+import java.util.Properties;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.Plugin;
 import org.eclipse.keyple.core.service.PluginEvent;
@@ -74,7 +75,7 @@ public class RemotePluginServerObserver implements PluginObserverSpi {
 
     // EXECUTE_CALYPSO_SESSION_FROM_LOCAL_SELECTION
     if (BaseScenario.SERVICE_ID_1.equals(readerExtension.getServiceId())) {
-      SmartCard card = (SmartCard) readerExtension.getInitialCardContent();
+      SmartCard card = readerExtension.getInitialCardContent(SmartCard.class);
       InputDataDto inputDataDto = readerExtension.getInputData(InputDataDto.class);
       try {
         // execute a transaction
@@ -129,6 +130,32 @@ public class RemotePluginServerObserver implements PluginObserverSpi {
         throw new IllegalStateException("Reader should be contactless");
       }
       return new OutputDataDto().setUserId(inputDataDto.getUserId()).setSuccessful(true);
+    }
+
+    // CHECK_CARD_PRESENCE: the error raised by the remote reader is reported to the client
+    if (BaseScenario.SERVICE_ID_5.equals(readerExtension.getServiceId())) {
+      InputDataDto inputDataDto = readerExtension.getInputData(InputDataDto.class);
+      try {
+        reader.isCardPresent();
+        return new OutputDataDto().setUserId(inputDataDto.getUserId()).setSuccessful(true);
+      } catch (RuntimeException e) {
+        return new OutputDataDto()
+            .setUserId(inputDataDto.getUserId())
+            .setSuccessful(false)
+            .setErrorClassName(e.getClass().getName())
+            .setErrorMessage(e.getMessage());
+      }
+    }
+
+    // EXECUTE_FROM_JSON_API_CLIENT: the initial card content is a processed card selection scenario
+    if (BaseScenario.SERVICE_ID_6.equals(readerExtension.getServiceId())) {
+      InputDataDto inputDataDto = readerExtension.getInputData(InputDataDto.class);
+      Properties initialCardContent = readerExtension.getInitialCardContent(Properties.class);
+      boolean isSuccessful =
+          initialCardContent != null
+              && BaseScenario.JSON_API_PROCESSED_SCENARIO.equals(
+                  initialCardContent.getProperty("processedCardSelectionScenarioJsonString"));
+      return new OutputDataDto().setUserId(inputDataDto.getUserId()).setSuccessful(isSuccessful);
     }
 
     throw new IllegalArgumentException("Service Id not recognized");

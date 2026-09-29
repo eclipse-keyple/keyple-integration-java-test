@@ -35,6 +35,7 @@ public class AsyncScenarioITest extends BaseScenario {
     SmartCardServiceProvider.getService().unregisterPlugin(LOCAL_PLUGIN_NAME);
   }
 
+  @Test
   @Override
   public void execute_transaction_with_regular_plugin() {
 
@@ -54,11 +55,7 @@ public class AsyncScenarioITest extends BaseScenario {
                 .withAsyncNode(endpointClient, 2)
                 .build());
 
-    try {
-      Thread.sleep(1000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    executeRegularPluginScenario();
   }
 
   @Test

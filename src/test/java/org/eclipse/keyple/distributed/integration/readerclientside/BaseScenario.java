@@ -15,11 +15,17 @@ package org.eclipse.keyple.distributed.integration.readerclientside;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.*;
 import org.eclipse.keyple.card.generic.GenericExtensionService;
 import org.eclipse.keyple.core.service.*;
 import org.eclipse.keyple.core.util.HexUtil;
+import org.eclipse.keyple.core.util.json.JsonUtil;
 import org.eclipse.keyple.distributed.LocalServiceClient;
+import org.eclipse.keyple.distributed.MessageDto;
 import org.eclipse.keyple.distributed.RemotePluginServer;
 import org.eclipse.keyple.distributed.RemotePluginServerFactoryBuilder;
 import org.eclipse.keyple.distributed.integration.readerclientside.app.PluginObservationExceptionHandler;
@@ -38,6 +44,9 @@ import org.eclipse.keypop.reader.selection.CardSelectionResult;
 import org.eclipse.keypop.reader.selection.CardSelector;
 import org.eclipse.keypop.reader.selection.IsoCardSelector;
 import org.eclipse.keypop.reader.selection.spi.SmartCard;
+import org.example.thirdparty.ThirdPartyPluginFactory;
+import org.example.thirdparty.ThirdPartyReader;
+import org.example.thirdparty.ThirdPartyReaderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +65,12 @@ public abstract class BaseScenario {
   public static final String SERVICE_ID_2 = "CREATE_CONFIGURE_OBS_VIRTUAL_READER";
   public static final String SERVICE_ID_3 = "EXECUTE_CALYPSO_SESSION_FROM_REMOTE_SELECTION";
   public static final String SERVICE_ID_4 = "EXECUTE_ALL_METHODS";
+  public static final String SERVICE_ID_5 = "CHECK_CARD_PRESENCE";
+  public static final String SERVICE_ID_6 = "EXECUTE_FROM_JSON_API_CLIENT";
+
+  /** Processed card selection scenario sent by the client of the Server JSON API. */
+  public static final String JSON_API_PROCESSED_SCENARIO =
+      "[{\"hasMatched\":true,\"powerOnData\":\"1234\"}]";
 
   public static final String DEVICE_ID = "Xo99";
 
@@ -359,6 +374,107 @@ public abstract class BaseScenario {
     OutputDataDto output =
         localServiceExtension.executeRemoteService(
             SERVICE_ID_3, LOCAL_READER_NAME, null, user1, OutputDataDto.class);
+  }
+
+  /**
+   * Executes the {@link #SERVICE_ID_5} remote service on the reader of a third-party local plugin,
+   * whose card presence check fails with the provided failure mode.
+   *
+   * @return The exception raised locally by the reader, and the output of the remote service
+   *     containing the exception received by the server application.
+   */
+  Object[] remoteCardPresenceError(ThirdPartyReader.FailureMode failureMode) {
+    Plugin plugin =
+        SmartCardServiceProvider.getService().registerPlugin(new ThirdPartyPluginFactory());
+    try {
+      ThirdPartyReader.setFailureMode(failureMode);
+      RuntimeException localException = null;
+      try {
+        plugin.getReader(ThirdPartyReader.NAME).isCardPresent();
+      } catch (RuntimeException e) {
+        localException = e;
+      }
+      OutputDataDto output =
+          localServiceExtension.executeRemoteService(
+              SERVICE_ID_5, ThirdPartyReader.NAME, null, user1, OutputDataDto.class);
+      return new Object[] {localException, output};
+    } finally {
+      ThirdPartyReader.setFailureMode(ThirdPartyReader.FailureMode.NONE);
+      SmartCardServiceProvider.getService().unregisterPlugin(plugin.getName());
+    }
+  }
+
+  void remoteError_withKeypopException_keepsItsType() {
+    Object[] result = remoteCardPresenceError(ThirdPartyReader.FailureMode.READER_IO);
+    RuntimeException localException = (RuntimeException) result[0];
+    OutputDataDto output = (OutputDataDto) result[1];
+
+    assertThat(localException).isNotNull();
+    assertThat(localException.getClass().getName()).startsWith("org.eclipse.keypop.");
+    assertThat(output.isSuccessful()).isFalse();
+    assertThat(output.getErrorClassName()).isEqualTo(localException.getClass().getName());
+    assertThat(output.getErrorMessage()).isEqualTo(localException.getMessage());
+  }
+
+  void remoteError_withThirdPartyException_isProvidedAsRuntimeException() {
+    Object[] result = remoteCardPresenceError(ThirdPartyReader.FailureMode.THIRD_PARTY);
+    RuntimeException localException = (RuntimeException) result[0];
+    OutputDataDto output = (OutputDataDto) result[1];
+
+    assertThat(localException).isInstanceOf(ThirdPartyReaderException.class);
+    assertThat(output.isSuccessful()).isFalse();
+    assertThat(output.getErrorClassName()).isEqualTo(RuntimeException.class.getName());
+    assertThat(output.getErrorMessage())
+        .isEqualTo(
+            "Remote exception ["
+                + ThirdPartyReaderException.class.getName()
+                + "]: "
+                + localException.getMessage());
+  }
+
+  /**
+   * Simulates a client of the Server JSON API (non-Keyple terminal) which sends its request as a
+   * JSON string, with a processed card selection scenario as initial card content.
+   */
+  void jsonApiClient_withInitialCardContent_successful() {
+    JsonObject body = new JsonObject();
+    body.addProperty("coreApiLevel", 2);
+    body.addProperty("serviceId", SERVICE_ID_6);
+    body.addProperty("isReaderContactless", true);
+    JsonObject inputData = new JsonObject();
+    inputData.addProperty("userId", user1.getUserId());
+    body.add("inputData", inputData);
+    JsonObject initialCardContent = new JsonObject();
+    initialCardContent.addProperty(
+        "processedCardSelectionScenarioJsonString", JSON_API_PROCESSED_SCENARIO);
+    body.add("initialCardContent", initialCardContent);
+    body.addProperty("initialCardContentClassName", "java.util.Properties");
+
+    String sessionId = UUID.randomUUID().toString();
+    JsonObject request = new JsonObject();
+    request.addProperty("apiLevel", 3);
+    request.addProperty("sessionId", sessionId);
+    request.addProperty("action", "EXECUTE_REMOTE_SERVICE");
+    request.addProperty("clientNodeId", UUID.randomUUID().toString());
+    request.addProperty("localReaderName", "READER_1");
+    request.addProperty("body", body.toString());
+
+    // As done by the server controller: deserialize the request, process it, serialize the response
+    MessageDto message = JsonUtil.getParser().fromJson(request.toString(), MessageDto.class);
+    List<MessageDto> responses = remotePluginExtension.getSyncNode().onRequest(message);
+    JsonArray jsonResponses =
+        JsonUtil.getParser().fromJson(JsonUtil.toJson(responses), JsonArray.class);
+
+    assertThat(jsonResponses).hasSize(1);
+    JsonObject response = jsonResponses.get(0).getAsJsonObject();
+    assertThat(response.get("action").getAsString()).isEqualTo("END_REMOTE_SERVICE");
+    assertThat(response.get("sessionId").getAsString()).isEqualTo(sessionId);
+    JsonObject outputData =
+        JsonUtil.getParser()
+            .fromJson(response.get("body").getAsString(), JsonObject.class)
+            .getAsJsonObject("outputData");
+    assertThat(outputData.get("userId").getAsString()).isEqualTo(user1.getUserId());
+    assertThat(outputData.get("isSuccessful").getAsBoolean()).isTrue();
   }
 
   void all_methods() {

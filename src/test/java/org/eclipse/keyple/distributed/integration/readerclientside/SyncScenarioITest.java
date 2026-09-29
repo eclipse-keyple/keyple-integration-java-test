@@ -118,4 +118,19 @@ public class SyncScenarioITest extends BaseScenario {
   public void execute_all_methods() {
     all_methods();
   }
+
+  @Test
+  public void execute_remoteError_withKeypopException_keepsItsType() {
+    remoteError_withKeypopException_keepsItsType();
+  }
+
+  @Test
+  public void execute_remoteError_withThirdPartyException_isProvidedAsRuntimeException() {
+    remoteError_withThirdPartyException_isProvidedAsRuntimeException();
+  }
+
+  @Test
+  public void execute_jsonApiClient_withInitialCardContent_successful() {
+    jsonApiClient_withInitialCardContent_successful();
+  }
 }

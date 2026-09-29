@@ -291,6 +291,8 @@ public class CardSelectionManagerTest {
 
   @BeforeClass
   public static void beforeClass() {
+    SmartCardServiceProvider.getService().checkCardExtension(CalypsoExtensionService.getInstance());
+    SmartCardServiceProvider.getService().checkCardExtension(GenericExtensionService.getInstance());
     readerApiFactory = SmartCardServiceProvider.getService().getReaderApiFactory();
     expectedJsonScenario = JsonUtil.getParser().fromJson(EXPORT_JSON_SCENARIO, JsonObject.class);
     expectedJsonProcessedScenario =
